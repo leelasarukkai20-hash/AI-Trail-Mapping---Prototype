@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vert.app/schemas/route.schema.json",
+  "title": "Vert Route",
+  "description": "One curated trail route. It is a standard GeoJSON Feature: 'geometry' holds the path on the map, 'properties' holds everything the recommender and the UI need to know about the route. One file = one route.",
+  "type": "object",
+  "required": ["type", "geometry", "properties"],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "const": "Feature",
+      "description": "Always the literal string 'Feature'. This is what makes the file valid GeoJSON."
+    },
+
+    "geometry": {
+      "type": "object",
+      "description": "The line on the map that the runner follows.",
+      "required": ["type", "coordinates"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "LineString",
+          "description": "A route is a single connected line, so the geometry type is always 'LineString'."
+        },
+        "coordinates": {
+          "type": "array",
+          "description": "An ordered list of points along the route. GeoJSON order is [longitude, latitude, elevation] - longitude FIRST (this trips everyone up). Elevation is in meters. Get these by recording the run on a watch/phone and exporting a GPX, then converting; don't hand-type them.",
+          "minItems": 2,
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "prefixItems": [
+              { "type": "number", "minimum": -180, "maximum": 180, "description": "longitude (x)" },
+              { "type": "number", "minimum": -90, "maximum": 90, "description": "latitude (y)" },
+              { "type": "number", "description": "elevation in meters" }
+            ]
+          }
+        }
+      }
+    },
+
+    "properties": {
+      "type": "object",
+      "description": "Everything about the route that isn't its shape on the map.",
+      "required": [
+        "id", "name", "status", "region", "shape", "distance_km", "gain_m",
+        "difficulty", "surface", "vibe_tags", "trailhead", "founder_notes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Stable, unique, lowercase-with-hyphens id, e.g. 'tennessee-valley-coastal-loop'. Used in URLs and the database. Never change it once a route is live."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "description": "Human-friendly name shown in the app, e.g. 'Tennessee Valley to Pirates Cove Loop'."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "active"],
+          "description": "Editorial state: 'draft' = still being worked on, not shown to users; 'active' = vetted and OK to recommend. Separate from physical trail closures, which are handled by the closures system at recommendation time."
+        },
+        "region": {
+          "type": "string",
+          "enum": ["Headlands", "Mill Valley", "Muir Beach", "Stinson Beach", "Other"],
+          "description": "Which Marin area the route is in. Keep this list short and controlled - add a new value here on purpose, don't free-type."
+        },
+        "shape": {
+          "type": "string",
+          "enum": ["loop", "out-and-back", "point-to-point"],
+          "description": "Route shape. 'point-to-point' means it starts and ends in different places (needs a shuttle/2 cars)."
+        },
+        "distance_km": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Total distance in kilometers. The ingest script derives this from the geometry and warns if your number is off - so this is really a sanity check on the track."
+        },
+        "gain_m": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total elevation gain (climbing) in meters - Vert's namesake. Also cross-checked by the ingest script against the geometry."
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["easy", "moderate", "hard", "very-hard"],
+          "description": "Your judgment call, accounting for distance, climb, and how technical the footing is."
+        },
+        "surface": {
+          "type": "object",
+          "description": "Rough breakdown of what the runner is on, as percentages. The three should add up to ~100.",
+          "required": ["trail_pct", "fire_road_pct", "road_pct"],
+          "additionalProperties": false,
+          "properties": {
+            "trail_pct": { "type": "integer", "minimum": 0, "maximum": 100, "description": "Singletrack / dirt trail." },
+            "fire_road_pct": { "type": "integer", "minimum": 0, "maximum": 100, "description": "Wide fire road / gravel." },
+            "road_pct": { "type": "integer", "minimum": 0, "maximum": 100, "description": "Paved road." }
+          }
+        },
+        "vibe_tags": {
+          "type": "array",
+          "description": "Controlled vocabulary of descriptive tags. These ARE the matching signal - thin or inconsistent tags = bad recommendations. Pick from the list; add a new tag to the enum deliberately when you genuinely need one.",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "shaded", "exposed", "ocean-views", "ridgeline", "summit",
+              "redwoods", "creek", "waterfall", "wildflowers",
+              "technical", "smooth", "steep-climb", "gradual", "rolling",
+              "beginner-friendly", "quiet", "popular", "dog-friendly"
+            ]
+          }
+        },
+        "trailhead": {
+          "type": "object",
+          "description": "Where the run starts.",
+          "required": ["name", "lat", "lon", "parking"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "description": "e.g. 'Tennessee Valley Trailhead'." },
+            "lat": { "type": "number", "minimum": -90, "maximum": 90, "description": "Latitude of the start (note: lat here, normal order, because it's a labeled field - not a GeoJSON coordinate pair)." },
+            "lon": { "type": "number", "minimum": -180, "maximum": 180, "description": "Longitude of the start." },
+            "parking": {
+              "type": "string",
+              "enum": ["lot", "street", "limited", "none"],
+              "description": "What parking is like. 'limited' = small lot that fills early on weekends."
+            },
+            "notes": { "type": "string", "description": "Optional: 'Lot fills by 9am Sat/Sun', 'Use the overflow lot', etc." }
+          }
+        },
+        "dogs_allowed": {
+          "type": "boolean",
+          "description": "Optional. Many Marin trails have specific dog rules - worth capturing."
+        },
+        "water_on_route": {
+          "type": "boolean",
+          "description": "Optional. Is there drinkable water (fountain/spigot) along the way?"
+        },
+        "last_verified": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Optional. YYYY-MM-DD date you last confirmed the route is accurate and open. Feeds the staleness idea."
+        },
+        "founder_notes": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Your voice - the local-knowledge sentence or two that a generated route can't give. 'Start early to beat the fog burn-off; the Pirates Cove descent is steep and loose.'"
+        }
+      }
+    }
+  }
+}

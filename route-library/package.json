@@ -1,0 +1,23 @@
+{
+  "name": "vert-route-library",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Curated Vert trail routes + the ingest/validate workflow (tasks R1 & R2).",
+  "scripts": {
+    "scaffold": "tsx scaffold.ts",
+    "export": "tsx export-routes.ts",
+    "apply": "tsx apply-routes.ts",
+    "migrate-status": "tsx migrate-status.ts",
+    "ingest": "tsx ingest.ts"
+  },
+  "dependencies": {
+    "@tmcw/togeojson": "^5.8.1",
+    "@xmldom/xmldom": "^0.9.6",
+    "ajv": "^8.17.1",
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}

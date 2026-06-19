@@ -16,22 +16,10 @@
     },
     "vibe_tags": [
       "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
       "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
+      "ridgeline",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "quiet"
     ],
     "trailhead": {
       "name": "Mountain Home Inn",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "From the Mountain Home trailhead up and over to Tam's quieter back side - shadier forest and fewer crowds than the coastal routes, with solid climbing. Free parking along Panoramic Highway at Mountain Home."
   },
   "geometry": {
     "type": "LineString",

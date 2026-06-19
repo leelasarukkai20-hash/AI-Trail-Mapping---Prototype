@@ -15,23 +15,11 @@
       "road_pct": 17
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
       "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
+      "ocean-views",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "shaded",
+      "technical"
     ],
     "trailhead": {
       "name": "Mill Valley Depot",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-18",
-    "founder_notes": "TBD"
+    "founder_notes": "Up the Dipsea and down the Cypress trail - a tidy loop with the Dipsea's climb and a quieter, shaded return. Poison oak on the Dipsea, and slick descents when wet."
   },
   "geometry": {
     "type": "LineString",

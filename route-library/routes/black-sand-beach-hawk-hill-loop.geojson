@@ -15,22 +15,11 @@
       "road_pct": 6
     },
     "vibe_tags": [
-      "shaded",
       "exposed",
       "ocean-views",
       "ridgeline",
       "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
       "popular"
     ],
     "trailhead": {
@@ -43,7 +32,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "Classic Headlands loop linking Black Sand (Rodeo) Beach with the Hawk Hill climb - huge Golden Gate Bridge and ocean views and almost no shade. Hawk Hill is a fall raptor-migration hotspot. Start early; it fogs in and fills up on weekends."
   },
   "geometry": {
     "type": "LineString",

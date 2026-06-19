@@ -15,23 +15,11 @@
       "road_pct": 2
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
-      "ridgeline",
-      "summit",
+      "exposed",
       "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "rolling"
     ],
     "trailhead": {
       "name": "Muir Beach",
@@ -43,7 +31,7 @@
     "dogs_allowed": true,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A coastal loop from Muir Beach up to the overlook and onto Dipsea terrain - strong ocean views and a forested stretch. Exposed up high, with poison oak on the Dipsea sections."
   },
   "geometry": {
     "type": "LineString",

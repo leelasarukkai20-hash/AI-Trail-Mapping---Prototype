@@ -15,23 +15,11 @@
       "road_pct": 18
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
+      "steep-climb",
       "ridgeline",
       "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "exposed",
+      "technical"
     ],
     "trailhead": {
       "name": "Mill Valley Depot",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "The name earns itself - a brutally steep climb packing about 1,250m of gain into under 19k, with big rewards up high on Tam. Honest walk-the-steeps territory and not a beginner loop."
   },
   "geometry": {
     "type": "LineString",

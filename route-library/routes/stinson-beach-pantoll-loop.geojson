@@ -15,23 +15,11 @@
       "road_pct": 24
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
-      "ridgeline",
-      "summit",
       "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "shaded",
+      "wildflowers"
     ],
     "trailhead": {
       "name": "Stinson Beach",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "Up from Stinson Beach to Pantoll and back - likely Matt Davis/Dipsea terrain with coastal meadows, forest, and a real climb off the beach. Free parking at Stinson and Pantoll, both of which fill on weekends."
   },
   "geometry": {
     "type": "LineString",

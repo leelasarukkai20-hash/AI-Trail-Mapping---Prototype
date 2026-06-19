@@ -16,22 +16,10 @@
     },
     "vibe_tags": [
       "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
       "rolling",
+      "gradual",
       "beginner-friendly",
-      "quiet",
-      "popular"
+      "quiet"
     ],
     "trailhead": {
       "name": "Oakwood Valley",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "An easy, partly shaded loop through gentle Oakwood Valley and the lower Old Springs/Miwok trails - a good warm-up or recovery run before the Headlands' bigger climbs."
   },
   "geometry": {
     "type": "LineString",

@@ -15,23 +15,12 @@
       "road_pct": 4
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
+      "steep-climb",
       "ridgeline",
+      "exposed",
       "summit",
       "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "technical"
     ],
     "trailhead": {
       "name": "Marinwood Community Center",
@@ -43,7 +32,7 @@
     "dogs_allowed": true,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "Sunday? Drop by the Marin Farmer's Market in San Rafael on your way home."
+    "founder_notes": "A massive all-day outing (~50k and 2,200m of climb) with sustained climbing across Tam's flanks. Carry real food and water and plan for changeable weather. Custom route name - confirm the exact line and add your own notes."
   },
   "geometry": {
     "type": "LineString",

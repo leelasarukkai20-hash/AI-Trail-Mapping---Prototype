@@ -15,23 +15,11 @@
       "road_pct": 0
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
+      "exposed",
       "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "rolling"
     ],
     "trailhead": {
       "name": "Muir Beach",
@@ -43,7 +31,7 @@
     "dogs_allowed": true,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A short, scenic coastal loop linking Muir Beach and rugged Pirates Cove - punchy climbs and a steep, loose cove descent for the distance. Big views and fully exposed."
   },
   "geometry": {
     "type": "LineString",

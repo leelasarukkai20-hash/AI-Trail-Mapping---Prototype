@@ -15,23 +15,12 @@
       "road_pct": 2
     },
     "vibe_tags": [
-      "shaded",
       "exposed",
       "ocean-views",
       "ridgeline",
-      "summit",
-      "redwoods",
       "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "redwoods",
+      "rolling"
     ],
     "trailhead": {
       "name": "Tennessee Valley",
@@ -43,7 +32,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "Links the Miwok climb with the Redwood Creek and Green Gulch drainages - coastal ridge views up high, shadier creek sections below. Exposed climbing with mixed footing."
   },
   "geometry": {
     "type": "LineString",

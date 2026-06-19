@@ -15,23 +15,11 @@
       "road_pct": 37
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
       "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
+      "redwoods",
+      "shaded",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "summit"
     ],
     "trailhead": {
       "name": "Mill Valley Depot",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-18",
-    "founder_notes": "TBD"
+    "founder_notes": "The Fern Creek route to East Peak - a steep, shaded, ferny creek climb to Tam's summit panorama. Short but stiff, and cool and damp in the lower canyon."
   },
   "geometry": {
     "type": "LineString",

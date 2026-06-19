@@ -15,23 +15,11 @@
       "road_pct": 15
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
-      "ridgeline",
-      "summit",
       "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
+      "shaded",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "wildflowers"
     ],
     "trailhead": {
       "name": "Pantoll Campground",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "From Pantoll along the Matt Davis Trail - a flowing traverse through forest and open coastal meadow with sweeping ocean views, plus a solid climb. Free parking at Pantoll (fills on weekends); slick when wet."
   },
   "geometry": {
     "type": "LineString",

@@ -15,23 +15,11 @@
       "road_pct": 7
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
+      "exposed",
       "ridgeline",
-      "summit",
-      "redwoods",
       "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "steep-climb"
     ],
     "trailhead": {
       "name": "Tennessee Valley",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A coastal sampler out to dramatic Pirates Cove, with a steep, loose pitch down toward the water, plus the Miwok and Redwood Creek sections. Big ocean views and very exposed."
   },
   "geometry": {
     "type": "LineString",

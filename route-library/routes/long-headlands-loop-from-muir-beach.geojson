@@ -15,23 +15,11 @@
       "road_pct": 15
     },
     "vibe_tags": [
-      "shaded",
       "exposed",
       "ocean-views",
       "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "rolling"
     ],
     "trailhead": {
       "name": "Muir Beach",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-18",
-    "founder_notes": "TBD"
+    "founder_notes": "A big coastal day from Muir Beach deep into the Headlands and back - long, exposed, and full of rolling climb. Carry water and food; few bail-out points once you commit."
   },
   "geometry": {
     "type": "LineString",

@@ -15,23 +15,11 @@
       "road_pct": 3
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
       "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
+      "ocean-views",
+      "exposed",
       "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "ridgeline"
     ],
     "trailhead": {
       "name": "SCA Trailhead",
@@ -43,7 +31,7 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "The full Ninja - a local-favorite Headlands singletrack loop, twistier and more technical than the fire-road routes, with coastal views. Local route name - add your own line and landmarks."
   },
   "geometry": {
     "type": "LineString",

@@ -15,23 +15,11 @@
       "road_pct": 12
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
+      "exposed",
+      "shaded",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "rolling"
     ],
     "trailhead": {
       "name": "Oakwood Valley",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "From shaded Oakwood Valley out to the cliffs at Pirates Cove - a forest start giving way to exposed coast, with a steep, loose pitch at the cove. Good views for the distance."
   },
   "geometry": {
     "type": "LineString",

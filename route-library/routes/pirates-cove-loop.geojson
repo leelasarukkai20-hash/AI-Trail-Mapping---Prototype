@@ -15,23 +15,11 @@
       "road_pct": 8
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
+      "exposed",
       "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "rolling"
     ],
     "trailhead": {
       "name": "Tennessee Valley",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A compact coastal loop to rugged Pirates Cove from the Tennessee Valley side - dramatic cliffs and a short, steep, loose descent to the water. Fully exposed; the TV lot fills early on weekends."
   },
   "geometry": {
     "type": "LineString",

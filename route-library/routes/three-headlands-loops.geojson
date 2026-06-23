@@ -15,22 +15,11 @@
       "road_pct": 4
     },
     "vibe_tags": [
-      "shaded",
       "exposed",
       "ocean-views",
       "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
       "rolling",
-      "beginner-friendly",
-      "quiet",
       "popular"
     ],
     "trailhead": {
@@ -43,7 +32,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "Three stacked Headlands loops for a big, exposed day of coastal climbing and bridge and ocean views, with easy bail-outs back to the trailhead between loops. Confirm the exact loops."
   },
   "geometry": {
     "type": "LineString",

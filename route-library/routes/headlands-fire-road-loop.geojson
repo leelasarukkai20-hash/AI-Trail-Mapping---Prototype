@@ -15,23 +15,11 @@
       "road_pct": 0
     },
     "vibe_tags": [
-      "shaded",
       "exposed",
       "ocean-views",
       "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
       "smooth",
-      "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "gradual"
     ],
     "trailhead": {
       "name": "Tennessee Valley",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "All wide fire road - non-technical footing with classic Headlands ocean and bridge views. Good for steady efforts or when singletrack is muddy. Fully exposed, so mind the sun and wind."
   },
   "geometry": {
     "type": "LineString",

@@ -15,23 +15,11 @@
       "road_pct": 4
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
+      "exposed",
       "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
       "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "rolling"
     ],
     "trailhead": {
       "name": "Tennessee Valley",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A sweeping coastal ridge above Muir Beach with wide ocean views, spring wildflowers, and a flowy descent. Exposed and breezy; the lower meadows pop with color from March to May."
   },
   "geometry": {
     "type": "LineString",

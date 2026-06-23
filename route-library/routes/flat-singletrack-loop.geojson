@@ -15,23 +15,11 @@
       "road_pct": 17
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
       "smooth",
-      "steep-climb",
       "gradual",
       "rolling",
       "beginner-friendly",
-      "quiet",
-      "popular"
+      "quiet"
     ],
     "trailhead": {
       "name": "Camino Alta Open Space - Octopus Fire Road",
@@ -43,7 +31,7 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "About as flat as singletrack gets around here - a smooth, gentle loop for easy or recovery days and newer trail runners. Custom route - drop in the trailhead and any local notes."
   },
   "geometry": {
     "type": "LineString",

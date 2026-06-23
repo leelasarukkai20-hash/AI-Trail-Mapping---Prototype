@@ -16,22 +16,10 @@
     },
     "vibe_tags": [
       "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
       "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
+      "ocean-views",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "rolling"
     ],
     "trailhead": {
       "name": "Mill Valley Depot",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "Links the Tenderfoot Trail with Dipsea terrain - forested climbing and coastal views on a moderate loop close to town. Poison oak on the Dipsea sections."
   },
   "geometry": {
     "type": "LineString",

@@ -15,23 +15,12 @@
       "road_pct": 35
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
+      "exposed",
       "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
       "quiet",
-      "popular"
+      "gradual",
+      "ridgeline"
     ],
     "trailhead": {
       "name": "Tomales Point Trailhead (start)\nBolinas Park (end)",
@@ -43,7 +32,7 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A huge point-to-point down the Point Reyes coast toward Bolinas - beaches, coastal lakes, wildflowers, and long remote stretches. A logistics day: arrange a shuttle, carry plenty of water and food, and check tides and trail closures."
   },
   "geometry": {
     "type": "LineString",

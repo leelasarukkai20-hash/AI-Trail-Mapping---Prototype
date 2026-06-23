@@ -15,23 +15,11 @@
       "road_pct": 0
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
+      "shaded",
       "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
       "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "rolling"
     ],
     "trailhead": {
       "name": "Muir Beach",
@@ -43,7 +31,7 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "Starts by the Pelican Inn at Muir Beach, up through Green Gulch (the Zen Center valley and farm) to the ocean views on Dias Ridge. Gentle and scenic, with spring wildflowers in the gulch."
   },
   "geometry": {
     "type": "LineString",

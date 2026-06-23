@@ -16,22 +16,10 @@
     },
     "vibe_tags": [
       "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
       "rolling",
-      "beginner-friendly",
+      "gradual",
       "quiet",
-      "popular"
+      "creek"
     ],
     "trailhead": {
       "name": "Ross Common Park",
@@ -43,7 +31,7 @@
     "dogs_allowed": true,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A longer, gently rolling lake loop on mostly easy grades - good for steady mileage. Confirm which Ross Lake/area this is (there is one in Point Reyes and lake loops in the Tam watershed) and add local notes."
   },
   "geometry": {
     "type": "LineString",

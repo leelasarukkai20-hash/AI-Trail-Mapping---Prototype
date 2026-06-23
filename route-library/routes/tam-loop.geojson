@@ -15,23 +15,12 @@
       "road_pct": 3
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
       "ridgeline",
       "summit",
       "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
+      "ocean-views",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "shaded"
     ],
     "trailhead": {
       "name": "Mountain Home Inn",
@@ -43,7 +32,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A big singletrack loop around Tam with sustained climbing and the full range of redwood, ridge, and coastal scenery. Mostly trail and a proper hard day."
   },
   "geometry": {
     "type": "LineString",

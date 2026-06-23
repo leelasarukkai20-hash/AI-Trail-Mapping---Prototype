@@ -15,22 +15,11 @@
       "road_pct": 16
     },
     "vibe_tags": [
-      "shaded",
       "exposed",
       "ocean-views",
       "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
       "rolling",
-      "beginner-friendly",
-      "quiet",
       "popular"
     ],
     "trailhead": {
@@ -43,7 +32,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A half-marathon-distance Headlands tour stitching together the area's big climbs and coastal views. Exposed and rolling end to end - a solid benchmark day. Confirm the exact course."
   },
   "geometry": {
     "type": "LineString",

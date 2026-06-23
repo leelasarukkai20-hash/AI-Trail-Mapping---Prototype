@@ -15,23 +15,11 @@
       "road_pct": 0
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
       "ocean-views",
+      "exposed",
       "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
       "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "steep-climb"
     ],
     "trailhead": {
       "name": "Muir Beach",
@@ -43,7 +31,7 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "Pairs the Pirates Cove coast with the open Dias Ridge above Muir Beach - big ocean views and spring color, plus a steep, loose stretch at the cove. Exposed and windy."
   },
   "geometry": {
     "type": "LineString",

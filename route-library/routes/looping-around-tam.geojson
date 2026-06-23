@@ -15,23 +15,12 @@
       "road_pct": 1
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "ridgeline",
+      "redwoods",
+      "ocean-views",
+      "summit",
+      "shaded"
     ],
     "trailhead": {
       "name": "Mountain Home Inn",
@@ -43,7 +32,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-18",
-    "founder_notes": "TBD"
+    "founder_notes": "A loop around the mountain with big climbing and the full Tam sampler of redwood, ridge, and coastal views. Routes around Tam vary a lot - confirm the exact line."
   },
   "geometry": {
     "type": "LineString",

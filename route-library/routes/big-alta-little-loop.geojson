@@ -15,23 +15,12 @@
       "road_pct": 5
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "ridgeline",
+      "redwoods",
+      "shaded",
+      "technical",
+      "rolling"
     ],
     "trailhead": {
       "name": "Marinwood Community Center",
@@ -43,7 +32,7 @@
     "dogs_allowed": true,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "Sunday? Drop by the Marin Farmer's Market in San Rafael on your way home."
+    "founder_notes": "The shorter Big Alta loop - still a hard day of sustained singletrack climbing through mixed forest and open slopes. Custom route name - confirm the line."
   },
   "geometry": {
     "type": "LineString",

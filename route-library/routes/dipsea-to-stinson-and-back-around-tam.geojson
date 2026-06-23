@@ -15,22 +15,11 @@
       "road_pct": 18
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
+      "ocean-views",
+      "redwoods",
+      "technical",
+      "summit",
       "popular"
     ],
     "trailhead": {
@@ -43,7 +32,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-18",
-    "founder_notes": "TBD"
+    "founder_notes": "A big Tam day - up the Dipsea's steps to Stinson, then a long loop around the mountain. Huge variety of redwood, coast, and ridge, but real climbing and exposure. Watch for poison oak on the Dipsea sections."
   },
   "geometry": {
     "type": "LineString",

@@ -16,22 +16,11 @@
     },
     "vibe_tags": [
       "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
       "redwoods",
       "creek",
       "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
-      "steep-climb",
-      "gradual",
       "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "quiet"
     ],
     "trailhead": {
       "name": "Bon Tempe Lake Trailhead",
@@ -43,7 +32,7 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "Lush watershed loop near Alpine Lake with creek and waterfall sections (Cataract is best after winter rain) through shaded redwood and fir forest. Leashed dogs OK on watershed land; no swimming in the reservoir."
   },
   "geometry": {
     "type": "LineString",

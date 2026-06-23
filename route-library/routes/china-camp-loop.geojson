@@ -15,23 +15,11 @@
       "road_pct": 1
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
       "smooth",
-      "steep-climb",
-      "gradual",
       "rolling",
-      "beginner-friendly",
+      "gradual",
       "quiet",
-      "popular"
+      "beginner-friendly"
     ],
     "trailhead": {
       "name": "Shoreline from San Pedro Road",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "Flowy, mostly smooth singletrack through oak-bay woodland above San Pablo Bay, with bay views from the ridge - fast, gentle, and very runnable. A great easy day; popular with mountain bikers, and note State Park rules mean no dogs on the trails."
   },
   "geometry": {
     "type": "LineString",

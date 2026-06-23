@@ -15,23 +15,11 @@
       "road_pct": 32
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
       "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "ocean-views",
+      "technical",
+      "redwoods"
     ],
     "trailhead": {
       "name": "Mill Valley Depot",
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "A climb to Tam's East Peak by way of the Dipsea steps - stairs and steep grades rewarded with arguably the best panorama in the Bay on a clear day. Some paved summit-road miles near the top."
   },
   "geometry": {
     "type": "LineString",

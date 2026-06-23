@@ -15,22 +15,10 @@
       "road_pct": 22
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
-      "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
+      "technical",
+      "redwoods",
+      "ocean-views",
       "popular"
     ],
     "trailhead": {
@@ -43,7 +31,7 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "The legendary Dipsea - about 680 stairs out of Mill Valley, then steep ups (Dynamite, Cardiac) and downs through forest to Stinson Beach. Historic, iconic, and busy on weekends. Poison oak is abundant, and it ends at the coast, so plan a car or shuttle."
   },
   "geometry": {
     "type": "LineString",

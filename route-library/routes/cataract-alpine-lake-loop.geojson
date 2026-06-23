@@ -15,23 +15,12 @@
       "road_pct": 0
     },
     "vibe_tags": [
-      "shaded",
-      "exposed",
-      "ocean-views",
-      "ridgeline",
-      "summit",
-      "redwoods",
-      "creek",
       "waterfall",
-      "wildflowers",
-      "technical",
-      "smooth",
+      "creek",
+      "redwoods",
+      "shaded",
       "steep-climb",
-      "gradual",
-      "rolling",
-      "beginner-friendly",
-      "quiet",
-      "popular"
+      "wildflowers"
     ],
     "trailhead": {
       "name": "Rock Springs Trailhead",
@@ -43,7 +32,7 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "TBD"
+    "founder_notes": "The Cataract Falls showpiece - a staircase of waterfalls along Cataract Creek, lush with ferns and redwoods. Best in late winter and early spring after rain; the creek can dry to a trickle by late summer. Steep, stepped, and slick when wet, and no swimming (drinking-water reservoir)."
   },
   "geometry": {
     "type": "LineString",

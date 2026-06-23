@@ -17,10 +17,22 @@ src/
       callback/route.ts          # Step 2: code -> token exchange, CSRF check
       me/route.ts                # Proof: pulls athlete + last-90-day runs
       disconnect/route.ts        # Clears session
+    curate/                      # /curate: internal route review + edit tool
+    api/routes/                  # GET/PUT for the curate viewer
   lib/
     strava.ts                    # OAuth + API helpers (no deps), token refresh
     session.ts                   # Signed-cookie token store (SCAFFOLD ONLY)
+    routes.ts                    # Filesystem + schema validation for /curate
 ```
+
+## The curate viewer at `/curate`
+
+An internal tool for reviewing and editing the route library — map + form per
+route, writes back to `route-library/routes/<id>.geojson` with schema
+validation. Run `npm run dev`, set `NEXT_PUBLIC_MAPBOX_TOKEN` in `.env.local`,
+and open <http://localhost:3000/curate>. Full workflow lives in
+[`route-library/README.md`](./route-library/README.md). Not deployed — it
+relies on local filesystem writes.
 
 ## Run it locally
 

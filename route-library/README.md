@@ -54,20 +54,49 @@ The route line is the expensive part; almost everything else is either computed 
 3. **Fill the blanks per route:** `vibe_tags`, real `surface` percentages, `parking`, `founder_notes` — and confirm the auto-filled `name` (a Title Case version of the id, e.g. `matt-davis-loop` → "Matt Davis Loop"), `difficulty`, and `shape`. The judgment fields are stubbed with `TODO` so you can see what's left. Easiest way to do this across many routes is the spreadsheet workflow below.
 4. **Validate:** `npm run ingest`. A fresh draft deliberately fails until you add at least one vibe tag and real surface numbers — those two most affect match quality, so the validator won't let them slide.
 
-## Filling in metadata: the spreadsheet workflow (recommended for many routes)
+## Filling in metadata: the curate viewer (recommended for review + per-route edits)
 
-Editing dozens of `.geojson` files by hand is tedious and easy to get wrong. Instead, edit them all as rows in one spreadsheet:
+The **curate viewer** is a small Next.js page (at `/curate` in the main app) that puts the map and every editable field for a route side by side. It's the best way to walk through routes one at a time, verify what we're about to publish, and make small corrections before they go live. Each save validates against the same schema as `npm run ingest` and writes straight back to the route's `.geojson` file — geometry is never touched.
+
+**One-time setup** (from the repo root, not from `route-library/`):
+
+1. `npm install` — installs `mapbox-gl` + `ajv` and the rest of the app deps.
+2. Get a **free Mapbox public token** at <https://account.mapbox.com/access-tokens/> (a default token is created on signup; copy it — starts with `pk.`).
+3. Create `.env.local` in the repo root and add:
+   ```
+   NEXT_PUBLIC_MAPBOX_TOKEN=pk.your_token_here
+   ```
+   `.env.local` is gitignored, so your token stays off git.
+
+**Use it:**
+
+1. `npm run dev` in the repo root, open <http://localhost:3000/curate>.
+2. The left pane lists all routes with filters (region / status / difficulty / search). Click a route to load it.
+3. The map (Mapbox Outdoors — shows trail and road names) draws the route polyline with a trailhead pin. Pan/zoom to read the names.
+4. Below the map, edit any field. Vibe tags are clickable chips from the schema's controlled vocabulary; surface percentages show a live sum guard; dogs/water are tri-state (yes/no/not-set).
+5. Click **Save**. If the new values pass the schema, the file is written and you see "Saved ✓". If anything's wrong (e.g. missing vibe tag, surface doesn't sum to 100, founder_notes blank), you see the exact validator error inline — no broken data ever lands on disk.
+6. Geometry and the derived fields (`id`, `distance_km`, `gain_m`, `trailhead.lat/lon`) are read-only — the viewer never edits them.
+
+When a route looks good, flip its **Status** dropdown from `draft` to `active` and save — that's how a route gets promoted into "OK to recommend." Status is editorial only; physical trail closures are handled separately by the closures system at recommendation time.
+
+Once you and Leela are happy with a batch, commit the changed `routes/*.geojson` files and push as usual.
+
+## Filling in metadata: the spreadsheet workflow (for bulk first-pass authoring)
+
+When you've just scaffolded a wave of new routes and want to fill them all in at once, editing them as rows in a spreadsheet is faster than clicking through the viewer:
 
 1. **Export:** `npm run export` writes `routes-metadata.xlsx` — one row per route. Columns from the GPX (id, distance, gain, trailhead lat/lon) are greyed out; the fields you fill in have dropdowns wherever there's a fixed list (region, shape, difficulty, parking), pulled straight from the schema so they can't drift. A **Guide** tab lists every allowed value, including the `vibe_tags` vocabulary.
 2. **Fill it in.** Open the file (Excel shows the dropdowns best; Google Sheets works too), and fill the blank columns. `vibe_tags` is comma-separated — copy from the Guide tab. You and Leela can edit different rows in parallel.
 3. **Apply:** `npm run apply` reads the sheet and writes your values back into each `routes/<id>.geojson`. The geometry is never touched, and distance/gain/trailhead are recomputed from it.
 4. **Validate:** `npm run ingest` until everything's `✓`.
 
-Re-running `npm run export` rebuilds the sheet from the current files, so it always reflects what's saved — a quick way to see which routes still have blanks. The whole loop is safe to repeat as you and Leela chip away at the list.
+Re-running `npm run export` rebuilds the sheet from the current files, so it always reflects what's saved — a quick way to see which routes still have blanks. The xlsx is gitignored — the `.geojson` files are the source of truth.
+
+**Which workflow to use:** the spreadsheet is faster when you're filling 20+ blank routes from scratch; the curate viewer is much better for the per-route review pass, for any edit that benefits from seeing the map, and for promoting `draft` → `active`. The two coexist — switch back and forth as you like.
 
 ## Route status: draft vs active
 
-Every route has a `status`: `draft` (still being worked on — not shown to users) or `active` (vetted and OK to recommend). New scaffolded routes start as `draft`, and it's a dropdown column in the spreadsheet, so you promote a route to `active` deliberately once you've checked it. This is *editorial* state only — whether a physical trail is currently open/closed is a separate concern handled by the closures system at recommendation time, never stored here.
+Every route has a `status`: `draft` (still being worked on — not shown to users) or `active` (vetted and OK to recommend). New scaffolded routes start as `draft`. You promote a route to `active` deliberately once you've checked it — either by flipping the **Status** dropdown in the curate viewer or by editing the column in the spreadsheet. This is *editorial* state only — whether a physical trail is currently open/closed is a separate concern handled by the closures system at recommendation time, never stored here.
 
 `npm run ingest` prints a `by status` count so you can see how many are ready. (There's also a one-time `npm run migrate-status` that stamps `draft` on any older route file missing the field — already run on the initial library.)
 

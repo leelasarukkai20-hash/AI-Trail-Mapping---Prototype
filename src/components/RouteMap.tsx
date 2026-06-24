@@ -53,7 +53,7 @@ export default function RouteMap({ route, height = "260px" }: Props) {
         type: "line",
         source: SRC,
         layout: { "line-join": "round", "line-cap": "round" },
-        paint: { "line-color": "#ff5722", "line-width": 4 },
+        paint: { "line-color": "#C2410C", "line-width": 4 },
       });
 
       const coords = route.geometry.coordinates;
@@ -64,7 +64,7 @@ export default function RouteMap({ route, height = "260px" }: Props) {
       map.fitBounds(bounds, { padding: 40, duration: 400 });
 
       if (markerRef.current) markerRef.current.remove();
-      markerRef.current = new mapboxgl.Marker({ color: "#ff5722" })
+      markerRef.current = new mapboxgl.Marker({ color: "#C2410C" })
         .setLngLat([route.properties.trailhead.lon, route.properties.trailhead.lat])
         .setPopup(new mapboxgl.Popup().setText(route.properties.trailhead.name))
         .addTo(map);

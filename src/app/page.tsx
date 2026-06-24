@@ -308,9 +308,9 @@ function ResultDetail({ r }: { r: ScoredRouteResponse }) {
 function SurfaceBar({ surface }: { surface: { trail_pct: number; fire_road_pct: number; road_pct: number } }) {
   const total = surface.trail_pct + surface.fire_road_pct + surface.road_pct || 1;
   const segs = [
-    { pct: surface.trail_pct, color: "#4ea1ff", label: "trail" },
-    { pct: surface.fire_road_pct, color: "#ffcf6e", label: "fire road" },
-    { pct: surface.road_pct, color: "#93a1b0", label: "road" },
+    { pct: surface.trail_pct, color: "#264D2B", label: "trail" },
+    { pct: surface.fire_road_pct, color: "#B45309", label: "fire road" },
+    { pct: surface.road_pct, color: "#6B6157", label: "road" },
   ];
   return (
     <div>

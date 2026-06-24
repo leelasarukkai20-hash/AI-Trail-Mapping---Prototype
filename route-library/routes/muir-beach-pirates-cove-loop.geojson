@@ -31,7 +31,8 @@
     "dogs_allowed": true,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "A short, scenic coastal loop linking Muir Beach and rugged Pirates Cove - punchy climbs and a steep, loose cove descent for the distance. Big views and fully exposed."
+    "founder_notes": "A short, scenic coastal loop linking Muir Beach and rugged Pirates Cove - punchy climbs and a steep, loose cove descent for the distance. Big views and fully exposed.",
+    "strava_route_url": "https://www.strava.com/routes/3502404769706298350"
   },
   "geometry": {
     "type": "LineString",

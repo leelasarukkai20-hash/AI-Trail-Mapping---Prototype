@@ -32,7 +32,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "Links the Miwok climb with the Redwood Creek and Green Gulch drainages - coastal ridge views up high, shadier creek sections below. Exposed climbing with mixed footing."
+    "founder_notes": "Links the Miwok climb with the Redwood Creek and Green Gulch drainages - coastal ridge views up high, shadier creek sections below. Exposed climbing with mixed footing.",
+    "strava_route_url": "https://www.strava.com/routes/3502093174271225098"
   },
   "geometry": {
     "type": "LineString",

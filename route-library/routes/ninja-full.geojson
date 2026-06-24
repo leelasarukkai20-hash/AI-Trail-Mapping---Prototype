@@ -31,7 +31,8 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "The full Ninja - a local-favorite Headlands singletrack loop, twistier and more technical than the fire-road routes, with coastal views. Local route name - add your own line and landmarks."
+    "founder_notes": "The full Ninja - a local-favorite Headlands singletrack loop, twistier and more technical than the fire-road routes, with coastal views. Local route name - add your own line and landmarks.",
+    "strava_route_url": "https://www.strava.com/routes/3502090137325436170"
   },
   "geometry": {
     "type": "LineString",

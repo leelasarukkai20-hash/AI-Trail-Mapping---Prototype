@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "A summit climb starting on the Tenderfoot Trail out of Homestead Valley - shaded lower forest giving way to Tam's open upper slopes and the East Peak views."
+    "founder_notes": "A summit climb starting on the Tenderfoot Trail out of Homestead Valley - shaded lower forest giving way to Tam's open upper slopes and the East Peak views.",
+    "strava_route_url": "https://www.strava.com/routes/3355255725738996472"
   },
   "geometry": {
     "type": "LineString",

@@ -32,7 +32,8 @@
     "dogs_allowed": true,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "A massive all-day outing (~50k and 2,200m of climb) with sustained climbing across Tam's flanks. Carry real food and water and plan for changeable weather. Custom route name - confirm the exact line and add your own notes."
+    "founder_notes": "A massive all-day outing (~50k and 2,200m of climb) with sustained climbing across Tam's flanks. Carry real food and water and plan for changeable weather. Custom route name - confirm the exact line and add your own notes.",
+    "strava_route_url": "https://www.strava.com/routes/3502175588831535336"
   },
   "geometry": {
     "type": "LineString",

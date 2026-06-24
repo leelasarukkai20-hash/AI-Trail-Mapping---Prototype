@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "From Pantoll along the Matt Davis Trail - a flowing traverse through forest and open coastal meadow with sweeping ocean views, plus a solid climb. Free parking at Pantoll (fills on weekends); slick when wet."
+    "founder_notes": "From Pantoll along the Matt Davis Trail - a flowing traverse through forest and open coastal meadow with sweeping ocean views, plus a solid climb. Free parking at Pantoll (fills on weekends); slick when wet.",
+    "strava_route_url": "https://www.strava.com/routes/3453962254310349914"
   },
   "geometry": {
     "type": "LineString",

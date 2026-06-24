@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "A sweeping coastal ridge above Muir Beach with wide ocean views, spring wildflowers, and a flowy descent. Exposed and breezy; the lower meadows pop with color from March to May."
+    "founder_notes": "A sweeping coastal ridge above Muir Beach with wide ocean views, spring wildflowers, and a flowy descent. Exposed and breezy; the lower meadows pop with color from March to May.",
+    "strava_route_url": "https://www.strava.com/routes/3502093769747326798"
   },
   "geometry": {
     "type": "LineString",

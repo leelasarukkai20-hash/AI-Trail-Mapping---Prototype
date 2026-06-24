@@ -32,7 +32,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "Three stacked Headlands loops for a big, exposed day of coastal climbing and bridge and ocean views, with easy bail-outs back to the trailhead between loops. Confirm the exact loops."
+    "founder_notes": "Three stacked Headlands loops for a big, exposed day of coastal climbing and bridge and ocean views, with easy bail-outs back to the trailhead between loops. Confirm the exact loops.",
+    "strava_route_url": "https://www.strava.com/routes/3502175588825999592"
   },
   "geometry": {
     "type": "LineString",

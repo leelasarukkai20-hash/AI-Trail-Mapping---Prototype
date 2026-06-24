@@ -31,7 +31,8 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "The shorter Ninja - playful, technical Headlands singletrack with coastal views, minus the Hawk Hill add-on. Local route name - confirm the line."
+    "founder_notes": "The shorter Ninja - playful, technical Headlands singletrack with coastal views, minus the Hawk Hill add-on. Local route name - confirm the line.",
+    "strava_route_url": "https://www.strava.com/routes/3273409499226180724"
   },
   "geometry": {
     "type": "LineString",

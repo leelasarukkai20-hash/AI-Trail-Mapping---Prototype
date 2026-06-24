@@ -31,7 +31,8 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "Ninja Lite plus the Hawk Hill climb for the big Golden Gate Bridge view up top - fun, techy singletrack with a payoff summit. Exposed, and busy near Hawk Hill on weekends."
+    "founder_notes": "Ninja Lite plus the Hawk Hill climb for the big Golden Gate Bridge view up top - fun, techy singletrack with a payoff summit. Exposed, and busy near Hawk Hill on weekends.",
+    "strava_route_url": "https://www.strava.com/routes/3502096979615886158"
   },
   "geometry": {
     "type": "LineString",

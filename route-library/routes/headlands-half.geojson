@@ -32,7 +32,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "A half-marathon-distance Headlands tour stitching together the area's big climbs and coastal views. Exposed and rolling end to end - a solid benchmark day. Confirm the exact course."
+    "founder_notes": "A half-marathon-distance Headlands tour stitching together the area's big climbs and coastal views. Exposed and rolling end to end - a solid benchmark day. Confirm the exact course.",
+    "strava_route_url": "https://www.strava.com/routes/3502390459579591656"
   },
   "geometry": {
     "type": "LineString",

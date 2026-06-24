@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-18",
-    "founder_notes": "Up the Dipsea and down the Cypress trail - a tidy loop with the Dipsea's climb and a quieter, shaded return. Poison oak on the Dipsea, and slick descents when wet."
+    "founder_notes": "Up the Dipsea and down the Cypress trail - a tidy loop with the Dipsea's climb and a quieter, shaded return. Poison oak on the Dipsea, and slick descents when wet.",
+    "strava_route_url": "https://www.strava.com/routes/3502491007968706954"
   },
   "geometry": {
     "type": "LineString",

@@ -32,7 +32,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-18",
-    "founder_notes": "A loop around the mountain with big climbing and the full Tam sampler of redwood, ridge, and coastal views. Routes around Tam vary a lot - confirm the exact line."
+    "founder_notes": "A loop around the mountain with big climbing and the full Tam sampler of redwood, ridge, and coastal views. Routes around Tam vary a lot - confirm the exact line.",
+    "strava_route_url": "https://www.strava.com/routes/3502503803990528394"
   },
   "geometry": {
     "type": "LineString",

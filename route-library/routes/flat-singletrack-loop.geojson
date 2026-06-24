@@ -31,7 +31,8 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "About as flat as singletrack gets around here - a smooth, gentle loop for easy or recovery days and newer trail runners. Custom route - drop in the trailhead and any local notes."
+    "founder_notes": "About as flat as singletrack gets around here - a smooth, gentle loop for easy or recovery days and newer trail runners. Custom route - drop in the trailhead and any local notes.",
+    "strava_route_url": "https://www.strava.com/routes/3307191087116844278"
   },
   "geometry": {
     "type": "LineString",

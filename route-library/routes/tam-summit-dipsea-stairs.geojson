@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "A climb to Tam's East Peak by way of the Dipsea steps - stairs and steep grades rewarded with arguably the best panorama in the Bay on a clear day. Some paved summit-road miles near the top."
+    "founder_notes": "A climb to Tam's East Peak by way of the Dipsea steps - stairs and steep grades rewarded with arguably the best panorama in the Bay on a clear day. Some paved summit-road miles near the top.",
+    "strava_route_url": "https://www.strava.com/routes/2953768371289950454"
   },
   "geometry": {
     "type": "LineString",

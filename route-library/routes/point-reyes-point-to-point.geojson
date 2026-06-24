@@ -32,7 +32,8 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "A huge point-to-point down the Point Reyes coast toward Bolinas - beaches, coastal lakes, wildflowers, and long remote stretches. A logistics day: arrange a shuttle, carry plenty of water and food, and check tides and trail closures."
+    "founder_notes": "A huge point-to-point down the Point Reyes coast toward Bolinas - beaches, coastal lakes, wildflowers, and long remote stretches. A logistics day: arrange a shuttle, carry plenty of water and food, and check tides and trail closures.",
+    "strava_route_url": "https://www.strava.com/routes/3502175588826168552"
   },
   "geometry": {
     "type": "LineString",

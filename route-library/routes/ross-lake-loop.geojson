@@ -31,7 +31,8 @@
     "dogs_allowed": true,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "A gentle, mostly flat lake loop with easy grades and steady footing for relaxed miles. Confirm which Ross Lake/area this is and add local notes."
+    "founder_notes": "A gentle, mostly flat lake loop with easy grades and steady footing for relaxed miles. Confirm which Ross Lake/area this is and add local notes.",
+    "strava_route_url": "https://www.strava.com/routes/3307191322645522280"
   },
   "geometry": {
     "type": "LineString",

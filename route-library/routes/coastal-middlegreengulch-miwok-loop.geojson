@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "A quintessential Headlands loop - open coastal ridges with ocean and Golden Gate views, a dip through Green Gulch, and the steady Miwok climb. Very exposed; carry water on warm days and a layer for the fog."
+    "founder_notes": "A quintessential Headlands loop - open coastal ridges with ocean and Golden Gate views, a dip through Green Gulch, and the steady Miwok climb. Very exposed; carry water on warm days and a layer for the fog.",
+    "strava_route_url": "https://www.strava.com/routes/3502392852516068328"
   },
   "geometry": {
     "type": "LineString",

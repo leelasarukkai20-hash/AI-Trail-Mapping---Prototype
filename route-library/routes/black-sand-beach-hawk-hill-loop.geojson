@@ -32,7 +32,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "Classic Headlands loop linking Black Sand (Rodeo) Beach with the Hawk Hill climb - huge Golden Gate Bridge and ocean views and almost no shade. Hawk Hill is a fall raptor-migration hotspot. Start early; it fogs in and fills up on weekends."
+    "founder_notes": "Classic Headlands loop linking Black Sand (Rodeo) Beach with the Hawk Hill climb - huge Golden Gate Bridge and ocean views and almost no shade. Hawk Hill is a fall raptor-migration hotspot. Start early; it fogs in and fills up on weekends.",
+    "strava_route_url": "https://www.strava.com/routes/3502175588834830568"
   },
   "geometry": {
     "type": "LineString",

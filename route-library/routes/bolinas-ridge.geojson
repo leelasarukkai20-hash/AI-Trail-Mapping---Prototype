@@ -32,7 +32,8 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "A long, gently rolling ridge with sweeping views over Bolinas Lagoon and the coast, ducking through redwood groves and open pasture. Mostly runnable; expect mud and big puddles in the wet season and share it with mountain bikers."
+    "founder_notes": "A long, gently rolling ridge with sweeping views over Bolinas Lagoon and the coast, ducking through redwood groves and open pasture. Mostly runnable; expect mud and big puddles in the wet season and share it with mountain bikers.",
+    "strava_route_url": "https://www.strava.com/routes/3502093174278827274"
   },
   "geometry": {
     "type": "LineString",

@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "All wide fire road - non-technical footing with classic Headlands ocean and bridge views. Good for steady efforts or when singletrack is muddy. Fully exposed, so mind the sun and wind."
+    "founder_notes": "All wide fire road - non-technical footing with classic Headlands ocean and bridge views. Good for steady efforts or when singletrack is muddy. Fully exposed, so mind the sun and wind.",
+    "strava_route_url": "https://www.strava.com/routes/3502397405880526650"
   },
   "geometry": {
     "type": "LineString",

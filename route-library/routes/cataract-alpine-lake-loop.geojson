@@ -32,7 +32,8 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "The Cataract Falls showpiece - a staircase of waterfalls along Cataract Creek, lush with ferns and redwoods. Best in late winter and early spring after rain; the creek can dry to a trickle by late summer. Steep, stepped, and slick when wet, and no swimming (drinking-water reservoir)."
+    "founder_notes": "The Cataract Falls showpiece - a staircase of waterfalls along Cataract Creek, lush with ferns and redwoods. Best in late winter and early spring after rain; the creek can dry to a trickle by late summer. Steep, stepped, and slick when wet, and no swimming (drinking-water reservoir).",
+    "strava_route_url": "https://www.strava.com/routes/3430600628439268558"
   },
   "geometry": {
     "type": "LineString",

@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "From shaded Oakwood Valley out to the cliffs at Pirates Cove - a forest start giving way to exposed coast, with a steep, loose pitch at the cove. Good views for the distance."
+    "founder_notes": "From shaded Oakwood Valley out to the cliffs at Pirates Cove - a forest start giving way to exposed coast, with a steep, loose pitch at the cove. Good views for the distance.",
+    "strava_route_url": "https://www.strava.com/routes/3502392079070950376"
   },
   "geometry": {
     "type": "LineString",

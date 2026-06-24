@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "Combines the SCA Trail's Golden Gate Bridge views with the Miwok and Coastal sections - a scenic, exposed mid-distance loop. Some connector/road miles, so mind the crossings."
+    "founder_notes": "Combines the SCA Trail's Golden Gate Bridge views with the Miwok and Coastal sections - a scenic, exposed mid-distance loop. Some connector/road miles, so mind the crossings.",
+    "strava_route_url": "https://www.strava.com/routes/3502392079070692328"
   },
   "geometry": {
     "type": "LineString",

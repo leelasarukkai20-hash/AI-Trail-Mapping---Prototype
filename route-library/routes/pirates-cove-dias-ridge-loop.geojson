@@ -31,7 +31,8 @@
     "dogs_allowed": true,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "Pairs the Pirates Cove coast with the open Dias Ridge above Muir Beach - big ocean views and spring color, plus a steep, loose stretch at the cove. Exposed and windy."
+    "founder_notes": "Pairs the Pirates Cove coast with the open Dias Ridge above Muir Beach - big ocean views and spring color, plus a steep, loose stretch at the cove. Exposed and windy.",
+    "strava_route_url": "https://www.strava.com/routes/3502402670159604718"
   },
   "geometry": {
     "type": "LineString",

@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "Mountain Home out to the coast at Stinson and back - a hard loop with redwood, ridge, and ocean in one go. Likely uses Dipsea/Matt Davis terrain, so expect steps, steep descents, and poison oak."
+    "founder_notes": "Mountain Home out to the coast at Stinson and back - a hard loop with redwood, ridge, and ocean in one go. Likely uses Dipsea/Matt Davis terrain, so expect steps, steep descents, and poison oak.",
+    "strava_route_url": "https://www.strava.com/routes/3502178023408972118"
   },
   "geometry": {
     "type": "LineString",

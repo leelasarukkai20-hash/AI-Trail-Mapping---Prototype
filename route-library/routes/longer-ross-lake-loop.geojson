@@ -31,7 +31,8 @@
     "dogs_allowed": true,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "A longer, gently rolling lake loop on mostly easy grades - good for steady mileage. Confirm which Ross Lake/area this is (there is one in Point Reyes and lake loops in the Tam watershed) and add local notes."
+    "founder_notes": "A longer, gently rolling lake loop on mostly easy grades - good for steady mileage. Confirm which Ross Lake/area this is (there is one in Point Reyes and lake loops in the Tam watershed) and add local notes.",
+    "strava_route_url": "https://www.strava.com/routes/3307192757458836924"
   },
   "geometry": {
     "type": "LineString",

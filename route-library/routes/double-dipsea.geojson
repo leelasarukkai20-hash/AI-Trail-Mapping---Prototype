@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "The Dipsea both ways - Mill Valley to Stinson and back - doubling the stairs and the climbing. A serious quad day; pace the descents. Poison oak throughout."
+    "founder_notes": "The Dipsea both ways - Mill Valley to Stinson and back - doubling the stairs and the climbing. A serious quad day; pace the descents. Poison oak throughout.",
+    "strava_route_url": "https://www.strava.com/routes/3502095089720288202"
   },
   "geometry": {
     "type": "LineString",

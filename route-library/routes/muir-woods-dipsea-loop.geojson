@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "Old-growth redwoods in Muir Woods paired with the Dipsea's climbs. If you start inside Muir Woods, parking requires a reservation (gomuirwoods.com) - many start from Pantoll or the Dipsea trailhead to skip it. Poison oak on the Dipsea."
+    "founder_notes": "Old-growth redwoods in Muir Woods paired with the Dipsea's climbs. If you start inside Muir Woods, parking requires a reservation (gomuirwoods.com) - many start from Pantoll or the Dipsea trailhead to skip it. Poison oak on the Dipsea.",
+    "strava_route_url": "https://www.strava.com/routes/3502175588837603560"
   },
   "geometry": {
     "type": "LineString",

@@ -32,7 +32,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "The Steep Ravine classic - Webb Creek's redwood canyon with waterfalls and the famous wooden ladder, up to Tam and back to the coast. Slick when wet. A section of Steep Ravine has had closures, so check current status (a signed Dipsea/Lower Old Mine detour exists)."
+    "founder_notes": "The Steep Ravine classic - Webb Creek's redwood canyon with waterfalls and the famous wooden ladder, up to Tam and back to the coast. Slick when wet. A section of Steep Ravine has had closures, so check current status (a signed Dipsea/Lower Old Mine detour exists).",
+    "strava_route_url": "https://www.strava.com/routes/3502156097414420426"
   },
   "geometry": {
     "type": "LineString",

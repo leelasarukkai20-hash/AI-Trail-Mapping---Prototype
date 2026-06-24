@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": true,
     "last_verified": "2026-06-17",
-    "founder_notes": "Up to the summit via the aptly named Sun Trail - open, sunny manzanita slopes with coastal views before the East Peak panorama. Bring sun protection; little shade on the climb."
+    "founder_notes": "Up to the summit via the aptly named Sun Trail - open, sunny manzanita slopes with coastal views before the East Peak panorama. Bring sun protection; little shade on the climb.",
+    "strava_route_url": "https://www.strava.com/routes/3502390459579163624"
   },
   "geometry": {
     "type": "LineString",

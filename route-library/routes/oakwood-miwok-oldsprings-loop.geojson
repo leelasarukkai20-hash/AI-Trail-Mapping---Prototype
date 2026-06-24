@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "An easy, partly shaded loop through gentle Oakwood Valley and the lower Old Springs/Miwok trails - a good warm-up or recovery run before the Headlands' bigger climbs."
+    "founder_notes": "An easy, partly shaded loop through gentle Oakwood Valley and the lower Old Springs/Miwok trails - a good warm-up or recovery run before the Headlands' bigger climbs.",
+    "strava_route_url": "https://www.strava.com/routes/3502392852517230568"
   },
   "geometry": {
     "type": "LineString",

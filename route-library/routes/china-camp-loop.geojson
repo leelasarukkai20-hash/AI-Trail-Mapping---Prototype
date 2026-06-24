@@ -31,7 +31,8 @@
     "dogs_allowed": false,
     "water_on_route": false,
     "last_verified": "2026-06-17",
-    "founder_notes": "Flowy, mostly smooth singletrack through oak-bay woodland above San Pablo Bay, with bay views from the ridge - fast, gentle, and very runnable. A great easy day; popular with mountain bikers, and note State Park rules mean no dogs on the trails."
+    "founder_notes": "Flowy, mostly smooth singletrack through oak-bay woodland above San Pablo Bay, with bay views from the ridge - fast, gentle, and very runnable. A great easy day; popular with mountain bikers, and note State Park rules mean no dogs on the trails.",
+    "strava_route_url": "https://www.strava.com/routes/3441298915969271014"
   },
   "geometry": {
     "type": "LineString",

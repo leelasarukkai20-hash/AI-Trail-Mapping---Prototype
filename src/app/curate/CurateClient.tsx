@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { useEffect, useMemo, useState } from "react";
 import "./curate.css";
+import RouteMap from "@/components/RouteMap";
 import type {
   Route,
   RouteProperties,
@@ -32,10 +31,8 @@ type SaveState = { kind: "idle" } | { kind: "saving" } | { kind: "ok" } | { kind
 
 export default function CurateClient({
   initialRoutes,
-  mapboxToken,
 }: {
   initialRoutes: Route[];
-  mapboxToken: string;
 }) {
   const [routes, setRoutes] = useState<Route[]>(initialRoutes);
   const [selectedId, setSelectedId] = useState<string | null>(initialRoutes[0]?.properties.id ?? null);
@@ -154,7 +151,6 @@ export default function CurateClient({
             route={selectedRoute}
             draft={draft}
             setDraft={setDraft}
-            mapboxToken={mapboxToken}
             saveState={saveState}
             dirty={!!dirty}
             onSave={onSave}
@@ -175,7 +171,6 @@ function RouteDetail({
   route,
   draft,
   setDraft,
-  mapboxToken,
   saveState,
   dirty,
   onSave,
@@ -184,89 +179,11 @@ function RouteDetail({
   route: Route;
   draft: RouteProperties;
   setDraft: (p: RouteProperties) => void;
-  mapboxToken: string;
   saveState: SaveState;
   dirty: boolean;
   onSave: () => void;
   onRevert: () => void;
 }) {
-  const mapContainer = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
-  const markerRef = useRef<mapboxgl.Marker | null>(null);
-
-  // initialize map once
-  useEffect(() => {
-    if (!mapContainer.current || mapRef.current || !mapboxToken) return;
-    mapboxgl.accessToken = mapboxToken;
-    const map = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/outdoors-v12",
-      center: [-122.55, 37.9],
-      zoom: 10,
-    });
-    map.addControl(new mapboxgl.NavigationControl(), "top-right");
-    map.addControl(new mapboxgl.ScaleControl({ unit: "metric" }), "bottom-left");
-    mapRef.current = map;
-    return () => {
-      map.remove();
-      mapRef.current = null;
-    };
-  }, [mapboxToken]);
-
-  // redraw the route when it changes
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    const drawRoute = () => {
-      const SRC = "route-line";
-      const LAYER = "route-line-layer";
-      if (map.getLayer(LAYER)) map.removeLayer(LAYER);
-      if (map.getSource(SRC)) map.removeSource(SRC);
-      map.addSource(SRC, {
-        type: "geojson",
-        data: { type: "Feature", properties: {}, geometry: route.geometry },
-      });
-      map.addLayer({
-        id: LAYER,
-        type: "line",
-        source: SRC,
-        layout: { "line-join": "round", "line-cap": "round" },
-        paint: { "line-color": "#ff5722", "line-width": 4 },
-      });
-
-      // fit bounds
-      const coords = route.geometry.coordinates;
-      const bounds = coords.reduce(
-        (b, c) => b.extend([c[0], c[1]]),
-        new mapboxgl.LngLatBounds([coords[0][0], coords[0][1]], [coords[0][0], coords[0][1]])
-      );
-      map.fitBounds(bounds, { padding: 60, duration: 400 });
-
-      // trailhead marker
-      if (markerRef.current) markerRef.current.remove();
-      markerRef.current = new mapboxgl.Marker({ color: "#ff5722" })
-        .setLngLat([route.properties.trailhead.lon, route.properties.trailhead.lat])
-        .setPopup(new mapboxgl.Popup().setText(route.properties.trailhead.name))
-        .addTo(map);
-    };
-
-    if (map.isStyleLoaded()) {
-      drawRoute();
-    } else {
-      map.once("load", drawRoute);
-    }
-  }, [route]);
-
-  if (!mapboxToken) {
-    return (
-      <div className="empty">
-        <p><strong>Mapbox token missing.</strong></p>
-        <p>Add <code>NEXT_PUBLIC_MAPBOX_TOKEN=…</code> to <code>.env.local</code> and restart <code>npm run dev</code>.</p>
-      </div>
-    );
-  }
-
   const updateProps = (patch: Partial<RouteProperties>) => setDraft({ ...draft, ...patch });
   const updateSurface = (k: keyof RouteProperties["surface"], v: number) =>
     setDraft({ ...draft, surface: { ...draft.surface, [k]: v } });
@@ -283,7 +200,7 @@ function RouteDetail({
 
   return (
     <div className="detail">
-      <div ref={mapContainer} className="map" />
+      <div className="map"><RouteMap route={route} height="100%" /></div>
 
       <div className="editor">
         <div className="editor-header">

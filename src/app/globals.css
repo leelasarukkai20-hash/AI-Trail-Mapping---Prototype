@@ -22,7 +22,7 @@ html, body {
 main {
   max-width: 560px;
   margin: 0 auto;
-  padding: 32px 20px 64px;
+  padding: 32px 20px calc(64px + env(safe-area-inset-bottom));
   min-height: 100dvh;
 }
 
@@ -88,3 +88,58 @@ button {
 .banner.ok { background: rgba(110,231,168,0.12); color: #6ee7a8; }
 .banner.warn { background: rgba(255,207,110,0.12); color: #ffcf6e; }
 .banner.err { background: rgba(255,138,138,0.12); color: #ff8a8a; }
+
+.result-card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
+.result-card.top { border-color: var(--accent); }
+.result-card.expanded { border-color: var(--accent); }
+
+.result-summary { width: 100%; background: transparent; border: none; color: var(--text); text-align: left; padding: 18px; cursor: pointer; min-height: 56px; }
+.result-summary:hover { background: rgba(255,255,255,0.02); }
+
+.result-name { font-size: 18px; font-weight: 600; margin: 0 0 4px; }
+.result-stats { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.result-rationale { font-size: 14px; line-height: 1.5; }
+.result-eta { color: #6ee7a8; font-size: 13px; margin-top: 8px; }
+
+.result-detail { padding: 0 18px 18px; display: flex; flex-direction: column; gap: 16px; }
+
+.route-map { border-radius: 10px; overflow: hidden; }
+.map-missing { background: #121922; border: 1px dashed var(--border); border-radius: 10px; padding: 16px; color: var(--muted); font-size: 13px; }
+.map-missing p { margin: 4px 0; }
+
+.hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+.hero-num { font-size: 22px; font-weight: 700; line-height: 1.1; }
+.hero-unit { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+.surface-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: #121922; }
+.surface-legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); margin-top: 6px; }
+.surface-legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
+.vibe-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.vibe-chip { background: #121922; border: 1px solid var(--border); color: var(--text); font-size: 12px; padding: 4px 10px; border-radius: 999px; }
+
+.trailhead-block { background: #121922; border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+.trailhead-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.trailhead-name { font-weight: 600; font-size: 14px; }
+.map-link { text-decoration: none; padding: 8px 12px; font-size: 13px; white-space: nowrap; }
+
+.founder-notes { color: var(--text); font-style: italic; font-size: 14px; line-height: 1.5; margin: 0; opacity: 0.85; }
+
+.gpx-link { display: inline-block; align-self: flex-start; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; color: var(--text); text-decoration: none; font-size: 14px; font-weight: 600; }
+.gpx-link:hover { background: rgba(255,255,255,0.04); }
+
+.intent-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+.intent-chip { background: rgba(78,161,255,0.12); color: var(--accent); font-size: 12px; padding: 4px 10px; border-radius: 999px; }
+.results-header { font-size: 13px; color: var(--muted); margin: 16px 0 8px; }
+
+.sample-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.sample-chip { background: #121922; border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 8px 12px; border-radius: 999px; min-height: 36px; cursor: pointer; font-weight: 500; }
+.sample-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+.skeleton-card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+.skeleton-line { height: 12px; border-radius: 6px; background: linear-gradient(90deg, #1f2733, #2a3340, #1f2733); background-size: 200% 100%; animation: skeleton-pulse 1.4s infinite; margin-bottom: 10px; }
+.skeleton-line:last-child { margin-bottom: 0; }
+.skeleton-line.w-70 { width: 70%; }
+.skeleton-line.w-50 { width: 50%; }
+.skeleton-line.w-90 { width: 90%; }
+@keyframes skeleton-pulse { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }

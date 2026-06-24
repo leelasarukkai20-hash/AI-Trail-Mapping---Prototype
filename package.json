@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.105.0",
     "ajv": "^8.17.1",
     "mapbox-gl": "^3.8.0",
     "next": "^14.2.5",

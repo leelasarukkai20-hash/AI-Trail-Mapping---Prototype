@@ -377,6 +377,18 @@ function RouteDetail({
             onChange={(e) => updateProps({ founder_notes: e.target.value })}
           />
         </section>
+
+        <section>
+          <h3>External links</h3>
+          <Field label="Strava route URL">
+            <input
+              type="url"
+              placeholder="https://www.strava.com/routes/12345678"
+              value={draft.strava_route_url ?? ""}
+              onChange={(e) => updateProps({ strava_route_url: e.target.value || undefined })}
+            />
+          </Field>
+        </section>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import type { Route } from "../../route-library/types/route";
 import type { Intent } from "@/lib/intent";
+import type { WeatherSnapshot } from "@/lib/weather";
 
 // Lazy-load the map so Mapbox (~490kB) only ships when a user expands a result.
 const RouteMap = dynamic(() => import("@/components/RouteMap"), {
@@ -248,7 +249,7 @@ function ResultCard({
         onClick={() => onToggle(p.id)}
       >
         <h3 className="result-name">{p.name}</h3>
-        <div className="result-stats">{miles} mi · {feet} ft gain · {p.region} · {p.difficulty}</div>
+        <div className="result-stats">{miles} mi {p.shape} · {feet} ft gain · {p.region} · {p.difficulty}</div>
         <div className="result-rationale">{r.rationale}</div>
         {r.estimated_minutes != null && !expanded && (
           <div className="result-eta">~{r.estimated_minutes} min at your recent pace</div>
@@ -265,6 +266,17 @@ function ResultDetail({ r }: { r: ScoredRouteResponse }) {
   const feet = Math.round(p.gain_m * 3.281);
   const km = p.distance_km.toFixed(1);
   const m = p.gain_m;
+
+  const [weather, setWeather] = useState<WeatherSnapshot | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/weather?lat=${p.trailhead.lat}&lon=${p.trailhead.lon}`)
+      .then((r) => r.json())
+      .then((j) => { if (!cancelled) setWeather(j.weather ?? null); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [p.trailhead.lat, p.trailhead.lon]);
+
   return (
     <div className="result-detail">
       <RouteMap route={r.route} />
@@ -296,11 +308,34 @@ function ResultDetail({ r }: { r: ScoredRouteResponse }) {
             Open in Maps
           </a>
         </div>
+        {weather && (
+          <div className="weather">
+            <span>{weather.emoji} {weather.temp_f}°F {weather.label}</span>
+            <span>{weather.wind_mph} mph {weather.wind_cardinal}</span>
+          </div>
+        )}
       </div>
+
+      {(p.dogs_allowed !== undefined || p.water_on_route !== undefined || p.last_verified) && (
+        <div className="trail-facts">
+          {p.dogs_allowed === true && <span>🐕 dogs allowed</span>}
+          {p.dogs_allowed === false && <span>🚫 no dogs</span>}
+          {p.water_on_route === true && <span>💧 water on route</span>}
+          {p.water_on_route === false && <span>bring water</span>}
+          {p.last_verified && <span>verified {timeAgo(p.last_verified)}</span>}
+        </div>
+      )}
 
       {p.founder_notes && <p className="founder-notes">{p.founder_notes}</p>}
 
-      <a className="gpx-link" href={`/api/routes/${p.id}/gpx`}>↓ Download GPX</a>
+      <div className="external-actions">
+        {p.strava_route_url && (
+          <a className="btn-strava" href={p.strava_route_url} target="_blank" rel="noreferrer">
+            <StravaMark /> View on Strava
+          </a>
+        )}
+        <a className="gpx-link" href={`/api/routes/${p.id}/gpx`}>↓ Download GPX</a>
+      </div>
     </div>
   );
 }
@@ -340,6 +375,14 @@ function SkeletonResults() {
       ))}
     </>
   );
+}
+
+function timeAgo(yyyymmdd: string): string {
+  const days = Math.max(0, Math.floor((Date.now() - new Date(yyyymmdd).getTime()) / 86_400_000));
+  if (days < 7) return "this week";
+  if (days < 30) return `${Math.max(1, Math.floor(days / 7))}wk ago`;
+  if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+  return "over a year ago";
 }
 
 function mapsLink(lat: number, lon: number, label: string): string {

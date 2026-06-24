@@ -149,6 +149,11 @@
           "type": "string",
           "minLength": 1,
           "description": "Your voice - the local-knowledge sentence or two that a generated route can't give. 'Start early to beat the fog burn-off; the Pirates Cove descent is steep and loose.'"
+        },
+        "strava_route_url": {
+          "type": "string",
+          "pattern": "^https://(www\\.)?strava\\.com/routes/[0-9]+(\\?.*)?$",
+          "description": "Optional. Public Strava route URL, e.g. https://www.strava.com/routes/12345678. When set, the recommender shows a 'View on Strava' button."
         }
       }
     }

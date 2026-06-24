@@ -59,6 +59,7 @@ export interface RouteProperties {
   water_on_route?: boolean;
   last_verified?: string; // YYYY-MM-DD
   founder_notes: string;
+  strava_route_url?: string;
 }
 
 export interface RouteGeometry {

@@ -41,10 +41,10 @@ const BANNERS: Record<string, { kind: string; text: string }> = {
 };
 
 const SAMPLE_PROMPTS = [
-  "12 mi climby",
-  "easy 5 mi w/ dog",
-  "flat redwoods near Mill Valley",
-  "summit run with ocean views",
+  "Easy hour with my dog",
+  "Long Sunday with ocean views",
+  "Shaded redwoods, no crowds",
+  "Just give me vert",
 ];
 
 export default function Home() {

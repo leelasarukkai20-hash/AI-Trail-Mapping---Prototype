@@ -17,9 +17,8 @@
     "vibe_tags": [
       "exposed",
       "ocean-views",
-      "ridgeline",
-      "rolling",
-      "steep-climb"
+      "steep-climb",
+      "wildflowers"
     ],
     "trailhead": {
       "name": "Tennessee Valley",
@@ -30,8 +29,8 @@
     },
     "dogs_allowed": false,
     "water_on_route": true,
-    "last_verified": "2026-06-17",
-    "founder_notes": "A quintessential Headlands loop - open coastal ridges with ocean and Golden Gate views, a dip through Green Gulch, and the steady Miwok climb. Very exposed; carry water on warm days and a layer for the fog.",
+    "last_verified": "2026-06-23",
+    "founder_notes": "A quintessential Headlands loop that combines open coastal ridges with ocean views to the north and south, a dip through Green Gulch, and a steady and steep climb up Miwok. Exposed for the majority of the route. Can be hot and dry in the sun, or wet in the fog. ",
     "strava_route_url": "https://www.strava.com/routes/3502392852516068328"
   },
   "geometry": {

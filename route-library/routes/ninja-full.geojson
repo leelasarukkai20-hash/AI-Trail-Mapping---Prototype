@@ -15,11 +15,11 @@
       "road_pct": 3
     },
     "vibe_tags": [
-      "technical",
       "ocean-views",
       "exposed",
       "rolling",
-      "ridgeline"
+      "ridgeline",
+      "smooth"
     ],
     "trailhead": {
       "name": "SCA Trailhead",
@@ -30,8 +30,8 @@
     },
     "dogs_allowed": true,
     "water_on_route": false,
-    "last_verified": "2026-06-17",
-    "founder_notes": "The full Ninja - a local-favorite Headlands singletrack loop, twistier and more technical than the fire-road routes, with coastal views. Local route name - add your own line and landmarks.",
+    "last_verified": "2026-06-23",
+    "founder_notes": "The full Ninja - the longer version of a classic, favorite Headlands loop. Coastal views and wildflowers abound. ",
     "strava_route_url": "https://www.strava.com/routes/3502090137325436170"
   },
   "geometry": {

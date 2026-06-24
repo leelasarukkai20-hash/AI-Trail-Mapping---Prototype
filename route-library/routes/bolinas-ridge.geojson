@@ -20,7 +20,8 @@
       "rolling",
       "gradual",
       "exposed",
-      "redwoods"
+      "redwoods",
+      "smooth"
     ],
     "trailhead": {
       "name": "Pantoll Campground",
@@ -31,8 +32,8 @@
     },
     "dogs_allowed": true,
     "water_on_route": false,
-    "last_verified": "2026-06-17",
-    "founder_notes": "A long, gently rolling ridge with sweeping views over Bolinas Lagoon and the coast, ducking through redwood groves and open pasture. Mostly runnable; expect mud and big puddles in the wet season and share it with mountain bikers.",
+    "last_verified": "2026-06-23",
+    "founder_notes": "A long, gently rolling ridge with sweeping views over the Pacific coast, ducking through redwood groves and open pasture. ",
     "strava_route_url": "https://www.strava.com/routes/3502093174278827274"
   },
   "geometry": {

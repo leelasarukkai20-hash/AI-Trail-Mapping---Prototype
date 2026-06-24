@@ -18,9 +18,10 @@
       "steep-climb",
       "ridgeline",
       "redwoods",
-      "shaded",
-      "technical",
-      "rolling"
+      "rolling",
+      "smooth",
+      "exposed",
+      "quiet"
     ],
     "trailhead": {
       "name": "Marinwood Community Center",
@@ -31,8 +32,8 @@
     },
     "dogs_allowed": true,
     "water_on_route": true,
-    "last_verified": "2026-06-17",
-    "founder_notes": "The shorter Big Alta loop - still a hard day of sustained singletrack climbing through mixed forest and open slopes. Custom route name - confirm the line.",
+    "last_verified": "2026-06-23",
+    "founder_notes": "The short version of the Big Alta loop - still makes for a solid day of sustained climbing through some forest and across open grassy slopes. Beautiful ridge views back towards SF and the surrounding area on a clear day. Be prepared for hot conditions on a sunny day, much of the trail is quite exposed to the sun. ",
     "strava_route_url": "https://www.strava.com/routes/3445960505111754786"
   },
   "geometry": {

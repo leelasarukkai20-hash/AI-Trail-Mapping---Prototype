@@ -19,7 +19,8 @@
       "rolling",
       "gradual",
       "quiet",
-      "beginner-friendly"
+      "beginner-friendly",
+      "shaded"
     ],
     "trailhead": {
       "name": "Shoreline from San Pedro Road",
@@ -30,8 +31,8 @@
     },
     "dogs_allowed": false,
     "water_on_route": false,
-    "last_verified": "2026-06-17",
-    "founder_notes": "Flowy, mostly smooth singletrack through oak-bay woodland above San Pablo Bay, with bay views from the ridge - fast, gentle, and very runnable. A great easy day; popular with mountain bikers, and note State Park rules mean no dogs on the trails.",
+    "last_verified": "2026-06-23",
+    "founder_notes": "Flowy, mostly smooth singletrack through oak-bay woodland above San Pablo Bay. Some bay views from the top of the ridge. These trails very runnable and also popular with mountain bikers. Per State Park rules no dogs are allowed on the trails.",
     "strava_route_url": "https://www.strava.com/routes/3441298915969271014"
   },
   "geometry": {

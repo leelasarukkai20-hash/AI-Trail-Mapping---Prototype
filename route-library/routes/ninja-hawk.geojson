@@ -15,11 +15,11 @@
       "road_pct": 8
     },
     "vibe_tags": [
-      "technical",
       "ocean-views",
       "summit",
       "exposed",
-      "rolling"
+      "rolling",
+      "smooth"
     ],
     "trailhead": {
       "name": "SCA Trailhead",
@@ -30,8 +30,8 @@
     },
     "dogs_allowed": true,
     "water_on_route": false,
-    "last_verified": "2026-06-17",
-    "founder_notes": "Ninja Lite plus the Hawk Hill climb for the big Golden Gate Bridge view up top - fun, techy singletrack with a payoff summit. Exposed, and busy near Hawk Hill on weekends.",
+    "last_verified": "2026-06-23",
+    "founder_notes": "A variation of the Ninja Lite loop that kicks off up Hawk Hill for a big Golden Gate Bridge view. Exposed, and busy near Hawk Hill - especially during sunrise and sunset and over the weekend.",
     "strava_route_url": "https://www.strava.com/routes/3502096979615886158"
   },
   "geometry": {

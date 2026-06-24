@@ -19,8 +19,7 @@
       "ocean-views",
       "redwoods",
       "technical",
-      "summit",
-      "popular"
+      "summit"
     ],
     "trailhead": {
       "name": "Mill Valley Depot",
@@ -31,8 +30,8 @@
     },
     "dogs_allowed": false,
     "water_on_route": true,
-    "last_verified": "2026-06-18",
-    "founder_notes": "A big Tam day - up the Dipsea's steps to Stinson, then a long loop around the mountain. Huge variety of redwood, coast, and ridge, but real climbing and exposure. Watch for poison oak on the Dipsea sections.",
+    "last_verified": "2026-06-23",
+    "founder_notes": "A big day around Mount Tam - starts up the Dipsea trail to Stinson Beach, and then takes the long way home. Huge variety of redwood, coast, and ridge environments with solid climbing and exposure. ",
     "strava_route_url": "https://www.strava.com/routes/3502519206304890826"
   },
   "geometry": {

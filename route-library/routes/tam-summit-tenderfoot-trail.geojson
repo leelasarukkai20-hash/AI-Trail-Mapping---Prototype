@@ -3,7 +3,7 @@
   "properties": {
     "id": "tam-summit-tenderfoot-trail",
     "name": "Tam Summit (tenderfoot trail)",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "loop",
     "distance_km": 15.8,

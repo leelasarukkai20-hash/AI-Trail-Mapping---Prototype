@@ -3,7 +3,7 @@
   "properties": {
     "id": "mill-valley-to-alpine-lake-meander",
     "name": "Mill Valley to Alpine Lake Meander",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "loop",
     "distance_km": 40.4,

@@ -3,7 +3,7 @@
   "properties": {
     "id": "tam-loop",
     "name": "Tam Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "loop",
     "distance_km": 26.2,

@@ -3,7 +3,7 @@
   "properties": {
     "id": "bolinas-ridge",
     "name": "Bolinas Ridge",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "out-and-back",
     "distance_km": 21.3,

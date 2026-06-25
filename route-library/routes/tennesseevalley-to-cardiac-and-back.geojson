@@ -3,7 +3,7 @@
   "properties": {
     "id": "tennesseevalley-to-cardiac-and-back",
     "name": "TV to Cardiac and Back",
-    "status": "draft",
+    "status": "active",
     "region": "Headlands",
     "shape": "loop",
     "distance_km": 26.9,

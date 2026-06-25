@@ -3,7 +3,7 @@
   "properties": {
     "id": "double-dipsea",
     "name": "Double Dipsea",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "loop",
     "distance_km": 23.3,

@@ -1,12 +1,12 @@
 [
-  {
-    "id": "steep-ravine-ladder-2025",
-    "reason": "Steep Ravine Trail reported partial closure (storm damage / ladder section).",
-    "route_ids": ["stinson-beach-steep-ravine-tam-loop"],
-    "source_url": "https://www.parks.ca.gov/?page_id=471",
-    "since": "2025-07-01",
-    "until": null,
+    {
+    "id": "old-springs-trail-near-tennessee-valler",
+    "reason": "Boardwalk replacement and general maintenance.",
+    "route_ids": ["headlands-fire-road-loop","ninja-full","oakwood-miwok-oldsprings-loop","three-headlands-loops"],
+    "source_url": "https://www.nps.gov/goga/planyourvisit/conditions.htm",
+    "since": "2026-03-05",
+    "until": "2026-08-15",
     "last_checked": "2026-06-25",
-    "note": "SEEDED FROM RESEARCH — verify against the official Mount Tamalpais State Park alert before relying on it, and remove this entry if the trail has reopened."
+    "note": "Check back at the beginning of August"
   }
 ]

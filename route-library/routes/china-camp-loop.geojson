@@ -3,7 +3,7 @@
   "properties": {
     "id": "china-camp-loop",
     "name": "China Camp Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "loop",
     "distance_km": 14.7,

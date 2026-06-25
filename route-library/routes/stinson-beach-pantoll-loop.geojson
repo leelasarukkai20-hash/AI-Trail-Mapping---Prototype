@@ -3,7 +3,7 @@
   "properties": {
     "id": "stinson-beach-pantoll-loop",
     "name": "Stinson Beach to Pantoll Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Stinson Beach",
     "shape": "loop",
     "distance_km": 14.1,

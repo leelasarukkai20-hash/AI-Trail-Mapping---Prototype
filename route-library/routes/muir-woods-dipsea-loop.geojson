@@ -3,7 +3,7 @@
   "properties": {
     "id": "muir-woods-dipsea-loop",
     "name": "Muir Woods Dipsea Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "loop",
     "distance_km": 13.8,

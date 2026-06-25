@@ -3,7 +3,7 @@
   "properties": {
     "id": "ross-lake-loop",
     "name": "Ross Lake Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Other",
     "shape": "loop",
     "distance_km": 17.5,

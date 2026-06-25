@@ -3,7 +3,7 @@
   "properties": {
     "id": "stinson-beach-steep-ravine-tam-loop",
     "name": "Stinson Beach / Steep Ravine Tam Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Stinson Beach",
     "shape": "loop",
     "distance_km": 24.2,

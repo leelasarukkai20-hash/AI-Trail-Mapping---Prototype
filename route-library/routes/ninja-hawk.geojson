@@ -3,7 +3,7 @@
   "properties": {
     "id": "ninja-hawk",
     "name": "Ninja Lite + Hawk Hill",
-    "status": "draft",
+    "status": "active",
     "region": "Headlands",
     "shape": "loop",
     "distance_km": 14.5,

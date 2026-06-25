@@ -3,7 +3,7 @@
   "properties": {
     "id": "west-point-inn-matt-davis-loop",
     "name": "West Point Inn / Matt Davis Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "loop",
     "distance_km": 18.2,

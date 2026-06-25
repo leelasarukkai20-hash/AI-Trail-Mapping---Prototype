@@ -3,7 +3,7 @@
   "properties": {
     "id": "flat-singletrack-loop",
     "name": "Flat(est) Singletrack Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Other",
     "shape": "loop",
     "distance_km": 12.6,

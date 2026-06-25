@@ -3,7 +3,7 @@
   "properties": {
     "id": "three-headlands-loops",
     "name": "Three Headlands Loops",
-    "status": "draft",
+    "status": "active",
     "region": "Headlands",
     "shape": "loop",
     "distance_km": 32,

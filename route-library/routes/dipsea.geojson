@@ -3,7 +3,7 @@
   "properties": {
     "id": "dipsea",
     "name": "Dipsea",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "point-to-point",
     "distance_km": 11,

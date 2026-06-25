@@ -3,7 +3,7 @@
   "properties": {
     "id": "muir-beach-pirates-cove-loop",
     "name": "Muir Beach Pirates Cove Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Muir Beach",
     "shape": "loop",
     "distance_km": 8.9,

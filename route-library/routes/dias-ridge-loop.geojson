@@ -3,7 +3,7 @@
   "properties": {
     "id": "dias-ridge-loop",
     "name": "Dias Ridge Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Headlands",
     "shape": "loop",
     "distance_km": 17.3,

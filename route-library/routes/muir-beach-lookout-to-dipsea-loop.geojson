@@ -3,7 +3,7 @@
   "properties": {
     "id": "muir-beach-lookout-to-dipsea-loop",
     "name": "Muir Beach Lookout to Dipsea Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Muir Beach",
     "shape": "loop",
     "distance_km": 14.5,

@@ -3,7 +3,7 @@
   "properties": {
     "id": "ninja-lite",
     "name": "Ninja Lite",
-    "status": "draft",
+    "status": "active",
     "region": "Headlands",
     "shape": "loop",
     "distance_km": 13.8,

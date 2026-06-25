@@ -3,7 +3,7 @@
   "properties": {
     "id": "alpine-lake-loop",
     "name": "Alpine Lake Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Other",
     "shape": "loop",
     "distance_km": 19.1,

@@ -3,7 +3,7 @@
   "properties": {
     "id": "tam-summit-dipsea-stairs",
     "name": "Tam Summit (dipsea stairs)",
-    "status": "draft",
+    "status": "active",
     "region": "Mill Valley",
     "shape": "loop",
     "distance_km": 15.3,

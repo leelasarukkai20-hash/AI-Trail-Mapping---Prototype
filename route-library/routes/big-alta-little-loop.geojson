@@ -3,7 +3,7 @@
   "properties": {
     "id": "big-alta-little-loop",
     "name": "Big Alta Little Loop",
-    "status": "draft",
+    "status": "active",
     "region": "Other",
     "shape": "loop",
     "distance_km": 27.4,

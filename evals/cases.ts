@@ -20,6 +20,7 @@ export interface RankingCase {
   title: string;
   prompt: string; // the natural-language prompt this intent represents (for reference)
   intent: Intent;
+  closedIds?: Set<string>; // optional: simulate these route ids being closed
   assert: (ranked: ScoredRoute[]) => { pass: boolean; detail: string };
 }
 
@@ -119,14 +120,13 @@ export const rankingCases: RankingCase[] = [
   },
   {
     id: "RK-08",
-    title: "[known gap] never recommend a non-active route",
+    title: "status filter -> only active routes are recommended",
     prompt: "Recommend me a great run",
     intent: {},
     assert: (r) => {
-      if (!r.length) return { pass: false, detail: "no routes returned" };
+      if (!r.length) return { pass: false, detail: "no active routes (have any been promoted from draft?)" };
       const status = props(r[0]).status;
-      return { pass: status === "active",
-        detail: `top status=${status} -- EXPECTED FAIL until routes are promoted to active AND the filter in ranker.ts is re-enabled` };
+      return { pass: status === "active", detail: `top status=${status}` };
     },
   },
   {
@@ -140,6 +140,18 @@ export const rankingCases: RankingCase[] = [
       // It returns a closest match (graceful) but there's no confidence signal yet.
       return { pass: r.length > 0,
         detail: `closest=${props(top).id} (${km(top)} km), score=${top.score.toFixed(2)} -- no low-confidence flag exists yet (gap #4)` };
+    },
+  },
+  {
+    id: "RK-10",
+    title: "closure safety -> a closed route is never recommended",
+    prompt: "I want waterfalls and redwoods",
+    intent: { vibe_tags: ["waterfall", "redwoods"] },
+    closedIds: new Set(["alpine-lake-loop"]),
+    assert: (r) => {
+      const present = ids(r).includes("alpine-lake-loop");
+      return { pass: r.length > 0 && !present,
+        detail: `alpine-lake-loop present=${present}; top=${r.length ? props(r[0]).id : "(none)"}` };
     },
   },
 ];

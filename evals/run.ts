@@ -24,17 +24,24 @@ async function main() {
   try { (process as any).loadEnvFile?.(".env.local"); } catch { /* optional */ }
 
   const routes = listRoutes();
-  console.log(`\nLoaded ${routes.length} routes.`);
+  const activeCount = routes.filter((r) => r.properties.status === "active").length;
+  console.log(`\nLoaded ${routes.length} routes (${activeCount} active).`);
 
-  console.log(`\n--- Ranking (deterministic, no API) ---`);
-  let rPass = 0;
-  for (const c of rankingCases) {
-    const ranked = rankRoutes(routes, c.intent);
-    const { pass, detail } = c.assert(ranked);
-    line(pass, c.id, `${c.title}\n            ${detail}`);
-    if (pass) rPass++;
+  let rPass = 0, rRan = 0;
+  if (activeCount === 0) {
+    console.log(`\n--- Ranking SKIPPED: no routes are 'active' yet ---`);
+    console.log(`  Promote routes (e.g. in /curate) and re-run; the ranking cases need active routes.`);
+  } else {
+    console.log(`\n--- Ranking (deterministic, no API) ---`);
+    for (const c of rankingCases) {
+      rRan++;
+      const ranked = rankRoutes(routes, c.intent, c.closedIds);
+      const { pass, detail } = c.assert(ranked);
+      line(pass, c.id, `${c.title}\n            ${detail}`);
+      if (pass) rPass++;
+    }
+    console.log(`\nRanking: ${rPass}/${rankingCases.length} passed`);
   }
-  console.log(`\nRanking: ${rPass}/${rankingCases.length} passed`);
 
   let iPass = 0, iRan = 0;
   if (process.env.ANTHROPIC_API_KEY) {
@@ -57,8 +64,8 @@ async function main() {
     console.log(`  Set ANTHROPIC_API_KEY to run the ${intentCases.length} LLM cases (a few cents of Haiku).`);
   }
 
-  const failed = (rankingCases.length - rPass) + (iRan - iPass);
-  console.log(`\nDone. ${failed} case(s) failed${iRan === 0 ? " (intent cases not run)" : ""}.\n`);
+  const failed = (rRan - rPass) + (iRan - iPass);
+  console.log(`\nDone. ${failed} case(s) failed${activeCount === 0 ? " (ranking skipped -- no active routes)" : ""}${iRan === 0 ? " (intent cases not run)" : ""}.\n`);
   process.exit(failed > 0 ? 1 : 0);
 }
 

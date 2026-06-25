@@ -1,5 +1,6 @@
 import type { Route } from "../../route-library/types/route";
 import type { Intent, SurfacePreference } from "./intent";
+import { getClosedRouteIds } from "./closures";
 
 export interface ScoreBreakdown {
   distance: number;
@@ -103,10 +104,16 @@ function buildRationale(route: Route, intent: Intent, b: ScoreBreakdown): string
   return parts.join(" · ");
 }
 
-export function rankRoutes(routes: Route[], intent: Intent): ScoredRoute[] {
-  // TODO: re-enable status === "active" filter once curation in /curate has promoted routes.
-  // Today all 52 routes are status: "draft", so filtering them out leaves nothing to recommend.
+export function rankRoutes(
+  routes: Route[],
+  intent: Intent,
+  closedIds: Set<string> = getClosedRouteIds()
+): ScoredRoute[] {
   const filtered = routes.filter((r) => {
+    // Safety filters first: never recommend an unpublished or currently-closed route.
+    if (r.properties.status !== "active") return false;
+    if (closedIds.has(r.properties.id)) return false;
+    // Intent filters.
     if (intent.region && r.properties.region !== intent.region) return false;
     if (intent.dogs_allowed === true && r.properties.dogs_allowed !== true) return false;
     return true;

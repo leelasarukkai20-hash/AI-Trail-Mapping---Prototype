@@ -1,12 +1,16 @@
 /*
  * DRAFT privacy policy — a starting template, NOT legal advice.
- * Founders: review and adapt it to your actual data practices, retention, and
- * jurisdiction, and ideally have it looked over before the public pilot.
- * Fill in EFFECTIVE_DATE and CONTACT_EMAIL below.
+ *
+ * TODO(founders): before the public pilot, (1) fill in the two placeholders
+ * below — EFFECTIVE_DATE and CONTACT_EMAIL — and (2) have a lawyer review the
+ * full text against actual data practices, retention, and jurisdiction.
  */
 export const metadata = { title: "Privacy Policy — Marin Trails" };
 
+// TODO(founders): replace with the public-pilot launch date (YYYY-MM-DD).
 const EFFECTIVE_DATE = "[DATE]";
+// TODO(founders): replace with the contact address subscribers will email for
+// deletion / privacy questions.
 const CONTACT_EMAIL = "[your@email.com]";
 
 export default function PrivacyPage() {

@@ -5,12 +5,12 @@ import { loadTokens, saveTokens } from "@/lib/session";
 // GET /api/strava/me -> connection status + a quick proof the token works.
 // Returns the athlete and a summary of the last 90 days of runs.
 export async function GET() {
-  const stored = loadTokens();
+  const stored = await loadTokens();
   if (!stored) return NextResponse.json({ connected: false });
 
   try {
     const tokens = await getFreshTokens(stored);
-    if (tokens.access_token !== stored.access_token) saveTokens(tokens);
+    if (tokens.access_token !== stored.access_token) await saveTokens(tokens);
 
     const runs = await getRecentRuns(tokens.access_token);
     const totalMeters = runs.reduce((s, r) => s + r.distance, 0);

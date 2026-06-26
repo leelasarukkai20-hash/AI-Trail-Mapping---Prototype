@@ -6,6 +6,6 @@ import { clearTokens } from "@/lib/session";
 // the access token so Strava revokes the grant on their side, and delete the
 // user's tokens from Postgres.
 export async function POST() {
-  clearTokens();
+  await clearTokens();
   return NextResponse.json({ ok: true });
 }

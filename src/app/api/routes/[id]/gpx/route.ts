@@ -25,7 +25,8 @@ function getIdToFile(): Map<string, string> {
   return m;
 }
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   if (!ID_RE.test(params.id)) {
     return NextResponse.json({ error: "invalid id" }, { status: 400 });
   }

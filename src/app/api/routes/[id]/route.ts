@@ -4,13 +4,15 @@ import type { RouteProperties } from "../../../../../route-library/types/route";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const route = getRoute(params.id);
   if (!route) return NextResponse.json({ error: "not found" }, { status: 404 });
   return NextResponse.json({ route });
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   let body: { properties?: RouteProperties };
   try {
     body = await req.json();

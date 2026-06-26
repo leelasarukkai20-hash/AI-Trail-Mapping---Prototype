@@ -42,6 +42,9 @@ export interface StravaTokens {
   refresh_token: string;
   expires_at: number; // unix seconds
   athlete?: StravaAthlete;
+  // Granted OAuth scopes (e.g. "activity:read_all,profile:read_all"). Comes
+  // from the callback URL `scope` param, not the token-exchange response.
+  scope?: string;
 }
 
 export interface StravaAthlete {
@@ -112,6 +115,21 @@ export async function getFreshTokens(tokens: StravaTokens): Promise<StravaTokens
   if (tokens.expires_at - skewSeconds > now) return tokens;
   const refreshed = await refreshTokens(tokens.refresh_token);
   return { ...tokens, ...refreshed };
+}
+
+/**
+ * Fetch the current athlete (used by `/api/strava/me` to display the name).
+ * We re-fetch instead of caching because Strava only returns the athlete on
+ * the initial code exchange, not on refresh, and the user may rename on Strava.
+ */
+export async function getAthlete(accessToken: string): Promise<StravaAthlete> {
+  const res = await fetch(`${STRAVA_API}/athlete`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    cache: "no-store",
+  });
+  if (res.status === 429) throw new RateLimitError("Strava rate limit hit (429). Back off and retry.");
+  if (!res.ok) throw new Error(`Strava athlete fetch failed: ${res.status} ${await res.text()}`);
+  return res.json();
 }
 
 /** Pull recent activities. Used to fit the per-user pace-on-grade model. */

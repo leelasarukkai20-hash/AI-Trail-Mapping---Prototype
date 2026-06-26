@@ -3,19 +3,25 @@ import { listRoutes } from "@/lib/routes";
 import { parseIntent, withDerivedDistance } from "@/lib/intent";
 import { rankRoutes, matchConfidence, type ScoredRoute } from "@/lib/ranker";
 import { avgPaceFromRuns, estimateMovingTimeMinutes } from "@/lib/pace";
-import { loadTokens, saveTokens } from "@/lib/session";
+import { loadStravaTokens, saveStravaTokens } from "@/lib/strava-store";
 import { getFreshTokens, getRecentRuns } from "@/lib/strava";
+import { getCurrentUser } from "@/lib/auth/session";
 
 export const dynamic = "force-dynamic";
 
 type RecommendedRoute = ScoredRoute & { estimated_minutes: number | null };
 
 async function getUserAvgPace(): Promise<number | null> {
-  const stored = await loadTokens();
+  // Pace personalization is only available to signed-in users with Strava
+  // connected. Logged-out callers still get recommendations, just without
+  // a personal pace.
+  const user = await getCurrentUser();
+  if (!user) return null;
+  const stored = await loadStravaTokens(user.id);
   if (!stored) return null;
   try {
     const tokens = await getFreshTokens(stored);
-    if (tokens.access_token !== stored.access_token) await saveTokens(tokens);
+    if (tokens.access_token !== stored.access_token) await saveStravaTokens(user.id, tokens);
     const runs = await getRecentRuns(tokens.access_token);
     return avgPaceFromRuns(runs);
   } catch {

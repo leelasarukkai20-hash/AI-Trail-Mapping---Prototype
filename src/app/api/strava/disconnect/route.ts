@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
-import { clearTokens } from "@/lib/session";
+import { clearStravaTokens } from "@/lib/strava-store";
+import { requireUserApi } from "@/lib/auth/session";
 
-// POST /api/strava/disconnect -> clear the local session.
-// TODO (pilot): also call POST https://www.strava.com/oauth/deauthorize with
-// the access token so Strava revokes the grant on their side, and delete the
-// user's tokens from Postgres.
+// POST /api/strava/disconnect -> delete the caller's Strava tokens.
+//
+// Idempotent: deleting a non-existent row is a no-op. We still require auth so
+// an unauthenticated caller can't probe the endpoint.
+// TODO (pilot): also call POST https://www.strava.com/oauth/deauthorize so
+// Strava revokes the grant on their side too.
 export async function POST() {
-  await clearTokens();
+  const auth = await requireUserApi();
+  if (!auth.ok) return auth.response;
+  await clearStravaTokens(auth.user.id);
   return NextResponse.json({ ok: true });
 }

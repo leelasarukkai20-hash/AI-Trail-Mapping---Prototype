@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { listRoutes } from "@/lib/routes";
-import { parseIntent } from "@/lib/intent";
-import { rankRoutes, type ScoredRoute } from "@/lib/ranker";
+import { parseIntent, withDerivedDistance } from "@/lib/intent";
+import { rankRoutes, matchConfidence, type ScoredRoute } from "@/lib/ranker";
 import { avgPaceFromRuns, estimateMovingTimeMinutes } from "@/lib/pace";
 import { loadTokens, saveTokens } from "@/lib/session";
 import { getFreshTokens, getRecentRuns } from "@/lib/strava";
@@ -33,7 +33,22 @@ export async function POST(req: Request) {
   const prompt = body.prompt?.trim();
   if (!prompt) return NextResponse.json({ error: "prompt required" }, { status: 400 });
 
-  const [intent, avgPace] = await Promise.all([parseIntent(prompt), getUserAvgPace()]);
+  const [parsed, avgPace] = await Promise.all([parseIntent(prompt), getUserAvgPace()]);
+
+  // Out-of-coverage: don't force a Marin route on an out-of-area request.
+  if (parsed.out_of_coverage) {
+    return NextResponse.json({
+      intent: parsed,
+      top: null,
+      alternates: [],
+      out_of_coverage: true,
+      message: "We only cover Marin County trails right now.",
+      avg_pace_min_per_km: avgPace,
+    });
+  }
+
+  // Turn a time budget into a distance when no distance was given.
+  const intent = withDerivedDistance(parsed, avgPace);
 
   const ranked = rankRoutes(listRoutes(), intent);
   if (ranked.length === 0) {
@@ -49,6 +64,7 @@ export async function POST(req: Request) {
     intent,
     top: withPace[0],
     alternates: withPace.slice(1),
+    confidence: matchConfidence(ranked[0].score, intent),
     avg_pace_min_per_km: avgPace,
   });
 }

@@ -12,8 +12,8 @@
  * Each assert/check returns { pass, detail } so a "fail" is still useful signal,
  * not a crash. Derived from "Vert - Recommendation Eval Test Cases.xlsx".
  */
-import type { Intent } from "../src/lib/intent";
-import type { ScoredRoute } from "../src/lib/ranker";
+import { withDerivedDistance, type Intent } from "../src/lib/intent";
+import { matchConfidence, type ScoredRoute } from "../src/lib/ranker";
 
 export interface RankingCase {
   id: string;
@@ -21,7 +21,7 @@ export interface RankingCase {
   prompt: string; // the natural-language prompt this intent represents (for reference)
   intent: Intent;
   closedIds?: Set<string>; // optional: simulate these route ids being closed
-  assert: (ranked: ScoredRoute[]) => { pass: boolean; detail: string };
+  assert: (ranked: ScoredRoute[], intent: Intent) => { pass: boolean; detail: string };
 }
 
 export interface IntentCase {
@@ -131,15 +131,14 @@ export const rankingCases: RankingCase[] = [
   },
   {
     id: "RK-09",
-    title: "[known gap] no-match should flag low confidence",
+    title: "no-match -> top pick reads as low confidence",
     prompt: "A flat 50-mile paved loop with no hills",
     intent: { distance_km: 80, max_gain_m: 0, surface_preference: "road" },
-    assert: (r) => {
+    assert: (r, intent) => {
       if (!r.length) return { pass: false, detail: "no routes returned" };
-      const top = r[0];
-      // It returns a closest match (graceful) but there's no confidence signal yet.
-      return { pass: r.length > 0,
-        detail: `closest=${props(top).id} (${km(top)} km), score=${top.score.toFixed(2)} -- no low-confidence flag exists yet (gap #4)` };
+      const conf = matchConfidence(r[0].score, intent);
+      return { pass: conf === "low",
+        detail: `confidence=${conf} (closest=${props(r[0]).id}, score=${r[0].score.toFixed(2)})` };
     },
   },
   {
@@ -152,6 +151,28 @@ export const rankingCases: RankingCase[] = [
       const present = ids(r).includes("alpine-lake-loop");
       return { pass: r.length > 0 && !present,
         detail: `alpine-lake-loop present=${present}; top=${r.length ? props(r[0]).id : "(none)"}` };
+    },
+  },
+  {
+    id: "RK-11",
+    title: "negation -> top pick avoids the excluded tag",
+    prompt: "Ocean-view run, but nothing too exposed",
+    intent: { vibe_tags: ["ocean-views"], exclude_vibe_tags: ["exposed"] },
+    assert: (r) => {
+      if (!r.length) return { pass: false, detail: "no routes returned" };
+      const hasExposed = props(r[0]).vibe_tags.includes("exposed");
+      return { pass: !hasExposed, detail: `top=${props(r[0]).id} exposed=${hasExposed}` };
+    },
+  },
+  {
+    id: "RK-12",
+    title: "confidence -> a real match reads as good",
+    prompt: "Easy, flat run",
+    intent: { difficulty: "easy", max_gain_m: 250 },
+    assert: (r, intent) => {
+      if (!r.length) return { pass: false, detail: "no routes returned" };
+      const conf = matchConfidence(r[0].score, intent);
+      return { pass: conf === "good", detail: `confidence=${conf} (top=${props(r[0]).id}, score=${r[0].score.toFixed(2)})` };
     },
   },
 ];
@@ -169,8 +190,9 @@ export const intentCases: IntentCase[] = [
     id: "IP-02",
     prompt: "Something around 10k with ocean views, not too technical",
     check: (i) => {
-      const ok = i.distance_km != null && i.distance_km >= 8 && i.distance_km <= 12 && (i.vibe_tags ?? []).includes("ocean-views");
-      return { pass: ok, detail: `dist=${i.distance_km} vibes=[${(i.vibe_tags ?? []).join(",")}] (note: 'not too technical' can't be expressed yet)` };
+      const ex = i.exclude_vibe_tags ?? [];
+      const ok = i.distance_km != null && i.distance_km >= 8 && i.distance_km <= 12 && (i.vibe_tags ?? []).includes("ocean-views") && ex.includes("technical");
+      return { pass: ok, detail: `dist=${i.distance_km} vibes=[${(i.vibe_tags ?? []).join(",")}] exclude=[${ex.join(",")}]` };
     },
   },
   {
@@ -178,7 +200,9 @@ export const intentCases: IntentCase[] = [
     prompt: "I've got about 90 minutes and want a shaded run in the redwoods",
     check: (i) => {
       const v = i.vibe_tags ?? [];
-      return { pass: v.includes("shaded") && v.includes("redwoods"), detail: `vibes=[${v.join(",")}] dist=${i.distance_km}` };
+      const resolved = withDerivedDistance(i, null);
+      const ok = (i.time_budget_min ?? 0) >= 60 && resolved.distance_km != null && resolved.distance_km > 0 && v.includes("shaded") && v.includes("redwoods");
+      return { pass: ok, detail: `time=${i.time_budget_min} -> ${resolved.distance_km} km; vibes=[${v.join(",")}]` };
     },
   },
   {
@@ -193,15 +217,16 @@ export const intentCases: IntentCase[] = [
     id: "IP-05",
     prompt: "A loop with no big climbs, and avoid exposed ridges",
     check: (i) => {
-      return { pass: i.max_gain_m != null, detail: `maxGain=${i.max_gain_m} (note: 'avoid exposed' has no field to land in -- gap #3)` };
+      const ex = i.exclude_vibe_tags ?? [];
+      return { pass: i.max_gain_m != null && ex.includes("exposed"),
+        detail: `maxGain=${i.max_gain_m} exclude=[${ex.join(",")}]` };
     },
   },
   {
     id: "IP-06",
     prompt: "Any good trail runs near Lake Tahoe?",
     check: (i) => {
-      const ok = i.region == null || i.region === "Other";
-      return { pass: ok, detail: `region=${i.region} (no out-of-coverage signal exists -- it should say Tahoe isn't covered)` };
+      return { pass: i.out_of_coverage === true, detail: `out_of_coverage=${i.out_of_coverage} region=${i.region}` };
     },
   },
   {

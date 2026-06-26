@@ -77,6 +77,14 @@ function difficultyScore(route: Route, intent: Intent): number {
 }
 
 const WEIGHTS = { distance: 0.30, gain: 0.25, surface: 0.15, vibe: 0.20, difficulty: 0.10 };
+const EXCLUDE_PENALTY = 0.5; // demotion applied when a route carries an avoided vibe tag
+
+function excludeFraction(route: Route, intent: Intent): number {
+  if (!intent.exclude_vibe_tags || intent.exclude_vibe_tags.length === 0) return 0;
+  const tags = new Set(route.properties.vibe_tags);
+  const hits = intent.exclude_vibe_tags.filter((t) => tags.has(t)).length;
+  return hits / intent.exclude_vibe_tags.length;
+}
 
 function buildRationale(route: Route, intent: Intent, b: ScoreBreakdown): string {
   const parts: string[] = [];
@@ -127,15 +135,40 @@ export function rankRoutes(
       vibe: vibeScore(route, intent),
       difficulty: difficultyScore(route, intent),
     };
-    const score =
+    const baseScore =
       breakdown.distance * WEIGHTS.distance +
       breakdown.gain * WEIGHTS.gain +
       breakdown.surface * WEIGHTS.surface +
       breakdown.vibe * WEIGHTS.vibe +
       breakdown.difficulty * WEIGHTS.difficulty;
+    const score = baseScore - EXCLUDE_PENALTY * excludeFraction(route, intent);
     return { route, score, breakdown, rationale: buildRationale(route, intent, breakdown) };
   });
 
   scored.sort((a, b) => b.score - a.score);
   return scored;
+}
+
+/** Max score this intent could reach = sum of the weights of constraints it actually specified. */
+function scoreCeiling(intent: Intent): number {
+  let c = 0;
+  if (intent.distance_km != null) c += WEIGHTS.distance;
+  if (intent.min_gain_m != null || intent.max_gain_m != null) c += WEIGHTS.gain;
+  if (intent.surface_preference && intent.surface_preference !== "any") c += WEIGHTS.surface;
+  if (intent.vibe_tags && intent.vibe_tags.length > 0) c += WEIGHTS.vibe;
+  if (intent.difficulty) c += WEIGHTS.difficulty;
+  return c;
+}
+
+export type MatchConfidence = "good" | "low";
+
+/**
+ * How well the top pick satisfies what the user asked for, relative to the best
+ * it could have scored. "low" => the UI should frame it as a "closest match".
+ * Filter-only prompts (just region/dogs) have no scoring ceiling, so they're "good".
+ */
+export function matchConfidence(topScore: number, intent: Intent): MatchConfidence {
+  const ceiling = scoreCeiling(intent);
+  if (ceiling === 0) return "good";
+  return topScore / ceiling >= 0.35 ? "good" : "low";
 }

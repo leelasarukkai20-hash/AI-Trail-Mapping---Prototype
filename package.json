@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "eval": "tsx evals/run.ts",
+    "fetch-streams": "tsx pace-model/fetch_streams.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",

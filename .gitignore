@@ -9,3 +9,6 @@ next-env.d.ts
 .DS_Store
 .claude/
 .neon
+
+# raw Strava streams used to fit the pace-on-grade model; re-pull with `npm run fetch-streams`
+pace-model/streams/

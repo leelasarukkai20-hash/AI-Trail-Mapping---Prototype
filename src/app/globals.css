@@ -284,3 +284,46 @@ button:active { transform: translateY(1px); }
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* --- App header (root layout) --- */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.app-header-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.brand {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.app-nav { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.app-nav .email {
+  font-size: 13px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.btn-sm {
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  width: auto;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+}

@@ -1,17 +1,15 @@
-// Lightweight signed-cookie session for the SCAFFOLD ONLY.
-//
-// It stores the Strava token set in an httpOnly, signed cookie so the OAuth
-// flow is testable end-to-end before the database exists.
-//
-// TODO (before pilot): replace this with Postgres. Store tokens server-side
-// keyed by user id, and keep only a session id in the cookie. Cookies have a
-// ~4KB limit and you do NOT want refresh tokens living in the browser long-term.
-
+/**
+ * Signed-cookie CSRF state for the Strava OAuth round-trip.
+ *
+ * This file used to also hold the Strava token set (signed-cookie scaffold);
+ * those have moved to the `strava_tokens` table — see `src/lib/strava-store.ts`.
+ * What's left here is genuinely cookie-shaped: a short-lived nonce that travels
+ * with the user-agent through Strava's consent screen and is verified on
+ * callback. The cookie never holds long-lived credentials.
+ */
 import { cookies } from "next/headers";
 import { createHmac, timingSafeEqual } from "crypto";
-import type { StravaTokens } from "./strava";
 
-const COOKIE_NAME = "mt_strava";
 const STATE_COOKIE = "mt_oauth_state";
 
 function secret(): string {
@@ -38,35 +36,6 @@ function verify(signed: string): string | null {
 }
 
 const secureCookie = process.env.NODE_ENV === "production";
-
-export async function saveTokens(tokens: StravaTokens): Promise<void> {
-  const payload = Buffer.from(JSON.stringify(tokens)).toString("base64url");
-  (await cookies()).set(COOKIE_NAME, sign(payload), {
-    httpOnly: true,
-    secure: secureCookie,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30, // 30 days
-  });
-}
-
-export async function loadTokens(): Promise<StravaTokens | null> {
-  const raw = (await cookies()).get(COOKIE_NAME)?.value;
-  if (!raw) return null;
-  const payload = verify(raw);
-  if (!payload) return null;
-  try {
-    return JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
-  } catch {
-    return null;
-  }
-}
-
-export async function clearTokens(): Promise<void> {
-  (await cookies()).delete(COOKIE_NAME);
-}
-
-// --- CSRF state for the authorize round-trip ---
 
 export async function setOAuthState(state: string): Promise<void> {
   (await cookies()).set(STATE_COOKIE, sign(state), {

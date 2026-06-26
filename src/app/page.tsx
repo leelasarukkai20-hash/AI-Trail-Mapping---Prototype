@@ -264,8 +264,6 @@ function ResultDetail({ r }: { r: ScoredRouteResponse }) {
   const p = r.route.properties;
   const miles = (p.distance_km * 0.621371).toFixed(1);
   const feet = Math.round(p.gain_m * 3.281);
-  const km = p.distance_km.toFixed(1);
-  const m = p.gain_m;
 
   const [weather, setWeather] = useState<WeatherSnapshot | null>(null);
   useEffect(() => {
@@ -282,8 +280,8 @@ function ResultDetail({ r }: { r: ScoredRouteResponse }) {
       <RouteMap route={r.route} />
 
       <div className="hero-stats">
-        <div><div className="hero-num">{miles}</div><div className="hero-unit">mi <span className="muted">({km} km)</span></div></div>
-        <div><div className="hero-num">{feet}</div><div className="hero-unit">ft gain <span className="muted">({m} m)</span></div></div>
+        <div><div className="hero-num">{miles}</div><div className="hero-unit">mi</div></div>
+        <div><div className="hero-num">{feet}</div><div className="hero-unit">ft gain</div></div>
         <div>
           <div className="hero-num">{r.estimated_minutes != null ? r.estimated_minutes : "—"}</div>
           <div className="hero-unit">min<span className="muted">{r.estimated_minutes != null ? " (your pace)" : ""}</span></div>

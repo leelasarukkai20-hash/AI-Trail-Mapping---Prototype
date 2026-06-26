@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { exchangeCodeForTokens } from "@/lib/strava";
-import { consumeOAuthState, saveTokens } from "@/lib/session";
+import { consumeOAuthState } from "@/lib/oauth-state";
+import { saveStravaTokens } from "@/lib/strava-store";
+import { getCurrentUser } from "@/lib/auth/session";
 
 // GET /api/strava/callback?code=...&state=...&scope=...
 // Strava redirects here after the user grants (or denies) access.
@@ -24,18 +26,25 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(`${base}/?strava=no_code`);
   }
 
+  // Defensive: the session that started /authorize should still be valid here,
+  // but Strava's round-trip can take a minute. If it expired, send back to
+  // sign-in rather than orphaning the tokens.
+  const user = await getCurrentUser();
+  if (!user) {
+    return NextResponse.redirect(`${base}/auth/sign-in`);
+  }
+
   // Verify Strava granted the scopes we need. The granted scopes come back as
   // a comma-separated "scope" param.
-  const granted = (searchParams.get("scope") || "").split(",");
+  const grantedRaw = searchParams.get("scope") || "";
+  const granted = grantedRaw.split(",");
   if (!granted.includes("activity:read_all")) {
     return NextResponse.redirect(`${base}/?strava=missing_scope`);
   }
 
   try {
     const tokens = await exchangeCodeForTokens(code);
-    await saveTokens(tokens);
-    // TODO: persist tokens + athlete to Postgres, then kick off the 90-day
-    // activity backfill (POST /api/strava/sync) to fit the pace-on-grade model.
+    await saveStravaTokens(user.id, { ...tokens, scope: grantedRaw });
     return NextResponse.redirect(`${base}/?strava=connected`);
   } catch (e) {
     console.error(e);

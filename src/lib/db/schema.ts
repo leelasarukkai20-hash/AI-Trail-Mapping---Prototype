@@ -22,6 +22,13 @@
 import { pgTable, text, uuid, bigint, timestamp, boolean, jsonb, integer } from "drizzle-orm/pg-core";
 
 // `user_id` columns hold a Neon Auth user id (neon_auth.users_sync.id), stored as text.
+//
+// Decision (WI-5, kept text — supersedes the open "switch to uuid" item):
+// Better Auth generates ids as random strings by default (not UUIDs), and Neon
+// exposes `auth.user_id()` as text. `text` works whether or not the id happens
+// to be UUID-shaped and matches the helper. Only migrate to `uuid` if you want
+// native uuid indexing AND the live type is genuinely uuid — neither is true
+// for the pilot.
 
 export const inviteCodes = pgTable("invite_codes", {
   code: text("code").primaryKey(),

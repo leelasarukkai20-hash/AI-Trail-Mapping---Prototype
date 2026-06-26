@@ -36,7 +36,7 @@ async function main() {
     for (const c of rankingCases) {
       rRan++;
       const ranked = rankRoutes(routes, c.intent, c.closedIds);
-      const { pass, detail } = c.assert(ranked);
+      const { pass, detail } = c.assert(ranked, c.intent);
       line(pass, c.id, `${c.title}\n            ${detail}`);
       if (pass) rPass++;
     }

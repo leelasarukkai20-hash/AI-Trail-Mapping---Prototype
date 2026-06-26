@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   const code = searchParams.get("code");
   const state = searchParams.get("state");
 
-  if (!consumeOAuthState(state)) {
+  if (!(await consumeOAuthState(state))) {
     return NextResponse.redirect(`${base}/?strava=bad_state`);
   }
   if (!code) {
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const tokens = await exchangeCodeForTokens(code);
-    saveTokens(tokens);
+    await saveTokens(tokens);
     // TODO: persist tokens + athlete to Postgres, then kick off the 90-day
     // activity backfill (POST /api/strava/sync) to fit the pace-on-grade model.
     return NextResponse.redirect(`${base}/?strava=connected`);

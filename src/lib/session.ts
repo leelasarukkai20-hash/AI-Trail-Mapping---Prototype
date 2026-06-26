@@ -39,9 +39,9 @@ function verify(signed: string): string | null {
 
 const secureCookie = process.env.NODE_ENV === "production";
 
-export function saveTokens(tokens: StravaTokens): void {
+export async function saveTokens(tokens: StravaTokens): Promise<void> {
   const payload = Buffer.from(JSON.stringify(tokens)).toString("base64url");
-  cookies().set(COOKIE_NAME, sign(payload), {
+  (await cookies()).set(COOKIE_NAME, sign(payload), {
     httpOnly: true,
     secure: secureCookie,
     sameSite: "lax",
@@ -50,8 +50,8 @@ export function saveTokens(tokens: StravaTokens): void {
   });
 }
 
-export function loadTokens(): StravaTokens | null {
-  const raw = cookies().get(COOKIE_NAME)?.value;
+export async function loadTokens(): Promise<StravaTokens | null> {
+  const raw = (await cookies()).get(COOKIE_NAME)?.value;
   if (!raw) return null;
   const payload = verify(raw);
   if (!payload) return null;
@@ -62,14 +62,14 @@ export function loadTokens(): StravaTokens | null {
   }
 }
 
-export function clearTokens(): void {
-  cookies().delete(COOKIE_NAME);
+export async function clearTokens(): Promise<void> {
+  (await cookies()).delete(COOKIE_NAME);
 }
 
 // --- CSRF state for the authorize round-trip ---
 
-export function setOAuthState(state: string): void {
-  cookies().set(STATE_COOKIE, sign(state), {
+export async function setOAuthState(state: string): Promise<void> {
+  (await cookies()).set(STATE_COOKIE, sign(state), {
     httpOnly: true,
     secure: secureCookie,
     sameSite: "lax",
@@ -78,9 +78,10 @@ export function setOAuthState(state: string): void {
   });
 }
 
-export function consumeOAuthState(returned: string | null): boolean {
-  const raw = cookies().get(STATE_COOKIE)?.value;
-  cookies().delete(STATE_COOKIE);
+export async function consumeOAuthState(returned: string | null): Promise<boolean> {
+  const jar = await cookies();
+  const raw = jar.get(STATE_COOKIE)?.value;
+  jar.delete(STATE_COOKIE);
   if (!raw || !returned) return false;
   const payload = verify(raw);
   return payload !== null && payload === returned;

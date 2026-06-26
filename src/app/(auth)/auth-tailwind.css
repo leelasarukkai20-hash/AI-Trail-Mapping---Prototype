@@ -1,0 +1,8 @@
+/*
+ * Tailwind + Neon Auth UI styles, imported ONLY by the (auth) route-group layout.
+ * Next.js code-splits CSS per route, so Tailwind's global reset (preflight) loads
+ * only on /auth pages and never touches the app's existing custom CSS
+ * (globals.css, curate.css) on every other page.
+ */
+@import "tailwindcss";
+@import "@neondatabase/auth-ui/tailwind";

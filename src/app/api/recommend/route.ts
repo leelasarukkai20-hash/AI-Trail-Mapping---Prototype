@@ -11,11 +11,11 @@ export const dynamic = "force-dynamic";
 type RecommendedRoute = ScoredRoute & { estimated_minutes: number | null };
 
 async function getUserAvgPace(): Promise<number | null> {
-  const stored = loadTokens();
+  const stored = await loadTokens();
   if (!stored) return null;
   try {
     const tokens = await getFreshTokens(stored);
-    if (tokens.access_token !== stored.access_token) saveTokens(tokens);
+    if (tokens.access_token !== stored.access_token) await saveTokens(tokens);
     const runs = await getRecentRuns(tokens.access_token);
     return avgPaceFromRuns(runs);
   } catch {

@@ -14,6 +14,18 @@
  */
 import { withDerivedDistance, type Intent } from "../src/lib/intent";
 import { matchConfidence, type ScoredRoute } from "../src/lib/ranker";
+import { listRoutes } from "../src/lib/routes";
+
+// Every active route in a region, computed from the live library so the case
+// stays correct as routes are added/promoted (used to simulate "everything in
+// the region is closed").
+function activeIdsInRegion(region: string): Set<string> {
+  return new Set(
+    listRoutes()
+      .filter((r) => r.properties.status === "active" && r.properties.region === region)
+      .map((r) => r.properties.id)
+  );
+}
 
 export interface RankingCase {
   id: string;
@@ -175,6 +187,51 @@ export const rankingCases: RankingCase[] = [
       return { pass: conf === "good", detail: `confidence=${conf} (top=${props(r[0]).id}, score=${r[0].score.toFixed(2)})` };
     },
   },
+  {
+    id: "RK-13",
+    title: "surface preference -> singletrack request ranks a high-trail route first",
+    prompt: "Mostly singletrack please",
+    intent: { surface_preference: "trail" },
+    assert: (r) => {
+      if (!r.length) return { pass: false, detail: "no routes returned" };
+      const pct = props(r[0]).surface.trail_pct;
+      return { pass: pct >= 80, detail: `top=${props(r[0]).id} trail_pct=${pct}` };
+    },
+  },
+  {
+    id: "RK-14",
+    title: "vert request -> min_gain produces a high-gain top pick",
+    prompt: "Just give me vert",
+    intent: { min_gain_m: 900 },
+    assert: (r) => {
+      if (!r.length) return { pass: false, detail: "no routes returned" };
+      const gain = props(r[0]).gain_m;
+      return { pass: gain >= 900, detail: `top=${props(r[0]).id} gain=${gain} m` };
+    },
+  },
+  {
+    id: "RK-15",
+    title: "difficulty -> easy request never tops out at hard/very-hard",
+    prompt: "Something easy",
+    intent: { difficulty: "easy" },
+    assert: (r) => {
+      if (!r.length) return { pass: false, detail: "no routes returned" };
+      const d = props(r[0]).difficulty;
+      const ok = d === "easy" || d === "moderate"; // within one rank of the ask
+      return { pass: ok, detail: `top=${props(r[0]).id} difficulty=${d}` };
+    },
+  },
+  {
+    id: "RK-16",
+    title: "closures can empty a region -> ranker returns nothing (API shows top:null)",
+    prompt: "Anything around Stinson",
+    intent: { region: "Stinson Beach" },
+    closedIds: activeIdsInRegion("Stinson Beach"),
+    assert: (r) => {
+      return { pass: r.length === 0,
+        detail: `returned=${r.length} (expected 0 with all Stinson Beach routes closed)` };
+    },
+  },
 ];
 
 export const intentCases: IntentCase[] = [
@@ -243,6 +300,106 @@ export const intentCases: IntentCase[] = [
     check: (i) => {
       const ok = i.dogs_allowed === true && i.distance_km != null && i.distance_km >= 9 && i.distance_km <= 15;
       return { pass: ok, detail: `dogs=${i.dogs_allowed} dist=${i.distance_km} diff=${i.difficulty}` };
+    },
+  },
+
+  // IP-09..IP-12: the four homepage sample chips (src/app/page.tsx
+  // SAMPLE_PROMPTS) — the prompts users are most likely to actually send.
+  {
+    id: "IP-09",
+    prompt: "Just give me vert",
+    check: (i) => {
+      // Pure climbing ask: min_gain must land, and no distance should be invented.
+      const ok = i.min_gain_m != null && i.min_gain_m > 0 && i.distance_km == null;
+      return { pass: ok, detail: `minGain=${i.min_gain_m} dist=${i.distance_km} diff=${i.difficulty}` };
+    },
+  },
+  {
+    id: "IP-10",
+    prompt: "Easy hour with my dog",
+    check: (i) => {
+      const ok =
+        i.dogs_allowed === true &&
+        i.time_budget_min != null && i.time_budget_min >= 45 && i.time_budget_min <= 75 &&
+        i.distance_km == null &&
+        (i.difficulty === "easy" || i.max_gain_m != null);
+      return { pass: ok, detail: `dogs=${i.dogs_allowed} time=${i.time_budget_min} dist=${i.distance_km} diff=${i.difficulty}` };
+    },
+  },
+  {
+    id: "IP-11",
+    prompt: "Long Sunday with ocean views",
+    check: (i) => {
+      // "Long" is qualitative: either left null (conservative) or resolved to a
+      // genuinely long distance. Inventing a short distance is the failure mode.
+      const distOk = i.distance_km == null || i.distance_km >= 15;
+      const ok = (i.vibe_tags ?? []).includes("ocean-views") && distOk;
+      return { pass: ok, detail: `vibes=[${(i.vibe_tags ?? []).join(",")}] dist=${i.distance_km}` };
+    },
+  },
+  {
+    id: "IP-12",
+    prompt: "Shaded redwoods, no crowds",
+    check: (i) => {
+      const v = i.vibe_tags ?? [];
+      const ex = i.exclude_vibe_tags ?? [];
+      // "No crowds" must land somewhere: want 'quiet' or avoid 'popular'.
+      const crowdsOk = v.includes("quiet") || ex.includes("popular");
+      const ok = v.includes("shaded") && v.includes("redwoods") && crowdsOk;
+      return { pass: ok, detail: `vibes=[${v.join(",")}] exclude=[${ex.join(",")}]` };
+    },
+  },
+
+  {
+    id: "IP-13",
+    prompt: "10 miles of mostly singletrack in the Headlands",
+    check: (i) => {
+      const ok =
+        i.surface_preference === "trail" &&
+        i.region === "Headlands" &&
+        i.distance_km != null && i.distance_km >= 14.5 && i.distance_km <= 17.5;
+      return { pass: ok, detail: `surface=${i.surface_preference} region=${i.region} dist=${i.distance_km}` };
+    },
+  },
+  {
+    id: "IP-14",
+    prompt: "Something with at least 3,000 feet of climbing",
+    check: (i) => {
+      // 3,000 ft = 914 m — checks the feet->meters conversion.
+      const ok = i.min_gain_m != null && i.min_gain_m >= 800 && i.min_gain_m <= 1000;
+      return { pass: ok, detail: `minGain=${i.min_gain_m} (expected ~914)` };
+    },
+  },
+  {
+    id: "IP-15",
+    prompt: "Run up Mount Tam from Mill Valley",
+    check: (i) => {
+      // In-coverage guard: Marin landmarks must NOT trip out_of_coverage.
+      const ok = i.out_of_coverage !== true;
+      return { pass: ok, detail: `out_of_coverage=${i.out_of_coverage} region=${i.region}` };
+    },
+  },
+  {
+    id: "IP-16",
+    prompt: "Surprise me with something nice",
+    check: (i) => {
+      // Conservative-parsing guard: a vague prompt must not hallucinate constraints.
+      const ok =
+        i.distance_km == null && i.min_gain_m == null && i.max_gain_m == null &&
+        i.region == null && i.difficulty == null && i.dogs_allowed == null &&
+        i.time_budget_min == null && i.out_of_coverage !== true &&
+        (i.vibe_tags ?? []).length <= 1;
+      return { pass: ok, detail: `dist=${i.distance_km} gain=${i.min_gain_m}/${i.max_gain_m} region=${i.region} diff=${i.difficulty} vibes=[${(i.vibe_tags ?? []).join(",")}]` };
+    },
+  },
+  {
+    id: "IP-17",
+    prompt: "I've got 2 hours but want around 10 miles",
+    check: (i) => {
+      // Distance beats time when both are given — distance_km is what the
+      // ranker consumes (withDerivedDistance only fills it when null).
+      const ok = i.distance_km != null && i.distance_km >= 14.5 && i.distance_km <= 17.5;
+      return { pass: ok, detail: `dist=${i.distance_km} time=${i.time_budget_min}` };
     },
   },
 ];

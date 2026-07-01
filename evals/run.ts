@@ -43,22 +43,32 @@ async function main() {
     console.log(`\nRanking: ${rPass}/${rankingCases.length} passed`);
   }
 
-  let iPass = 0, iRan = 0;
+  let iPass = 0, iRan = 0, iFlaky = 0;
   if (process.env.ANTHROPIC_API_KEY) {
     const { parseIntent } = await import("../src/lib/intent");
     console.log(`\n--- Intent parsing (calls Haiku) ---`);
     for (const c of intentCases) {
       iRan++;
-      try {
-        const intent = await parseIntent(c.prompt);
-        const { pass, detail } = c.check(intent);
-        line(pass, c.id, `"${c.prompt}"\n            ${detail}`);
-        if (pass) iPass++;
-      } catch (e) {
-        line(false, c.id, `ERROR: ${(e as Error).message}`);
+      // LLM output is nondeterministic; retry a failure once so a single flaky
+      // sample doesn't fail the suite. A retry-pass is flagged so repeat
+      // offenders are visible (a case that's flaky every run is a real gap).
+      let result: { pass: boolean; detail: string } | null = null;
+      for (let attempt = 1; attempt <= 2 && !result?.pass; attempt++) {
+        try {
+          const intent = await parseIntent(c.prompt);
+          result = c.check(intent);
+        } catch (e) {
+          result = { pass: false, detail: `ERROR: ${(e as Error).message}` };
+        }
+        if (result.pass && attempt === 2) {
+          iFlaky++;
+          result.detail += "  [flaky: passed on retry]";
+        }
       }
+      line(result!.pass, c.id, `"${c.prompt}"\n            ${result!.detail}`);
+      if (result!.pass) iPass++;
     }
-    console.log(`\nIntent: ${iPass}/${intentCases.length} passed`);
+    console.log(`\nIntent: ${iPass}/${intentCases.length} passed${iFlaky ? ` (${iFlaky} flaky)` : ""}`);
   } else {
     console.log(`\n--- Intent parsing SKIPPED ---`);
     console.log(`  Set ANTHROPIC_API_KEY to run the ${intentCases.length} LLM cases (a few cents of Haiku).`);

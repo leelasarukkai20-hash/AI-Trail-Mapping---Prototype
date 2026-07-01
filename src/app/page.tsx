@@ -36,6 +36,7 @@ interface RecommendResponse {
   intent: Intent;
   top: ScoredRouteResponse | null;
   alternates: ScoredRouteResponse[];
+  confidence?: "good" | "low";
   avg_pace_min_per_km: number | null;
 }
 
@@ -251,7 +252,13 @@ function Results({
       )}
       {data.top ? (
         <>
-          <div className="results-header">Top match</div>
+          {data.confidence === "low" && (
+            <div className="banner warn">
+              Nothing in the library nails that exactly — here’s our closest fit.
+              Add detail (distance, climbing, vibe, area) for a sharper match.
+            </div>
+          )}
+          <div className="results-header">{data.confidence === "low" ? "Closest match" : "Top match"}</div>
           <ResultCard r={data.top} top expanded={expandedId === data.top.route.properties.id} onToggle={onToggle} />
           {data.alternates.length > 0 && (
             <>

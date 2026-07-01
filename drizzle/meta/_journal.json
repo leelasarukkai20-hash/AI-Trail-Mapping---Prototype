@@ -8,6 +8,13 @@
       "when": 1782435861300,
       "tag": "0000_goofy_mole_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782948620204,
+      "tag": "0001_naive_loa",
+      "breakpoints": true
     }
   ]
 }

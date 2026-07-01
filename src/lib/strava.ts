@@ -168,6 +168,23 @@ export async function getRecentRuns(accessToken: string): Promise<StravaActivity
   return all.filter((a) => a.type === "Run" || a.sport_type === "TrailRun" || a.sport_type === "Run");
 }
 
+/**
+ * Revoke the app's access on Strava's side (the user's Strava settings will no
+ * longer list the app). Called on disconnect so deleting our token row doesn't
+ * leave a live grant behind.
+ */
+export async function deauthorize(accessToken: string): Promise<void> {
+  const res = await fetch("https://www.strava.com/oauth/deauthorize", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    cache: "no-store",
+  });
+  // 401 means the token is already invalid — the grant is effectively gone.
+  if (!res.ok && res.status !== 401) {
+    throw new Error(`Strava deauthorize failed: ${res.status} ${await res.text()}`);
+  }
+}
+
 export interface StravaActivity {
   id: number;
   name: string;

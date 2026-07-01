@@ -1,14 +1,19 @@
 import { NextResponse } from "next/server";
-import { getAthlete, getFreshTokens, getRecentRuns } from "@/lib/strava";
-import { loadStravaTokens, saveStravaTokens } from "@/lib/strava-store";
+import { loadStravaTokens } from "@/lib/strava-store";
+import { getStravaSummary } from "@/lib/strava-stats";
 import { getCurrentUser } from "@/lib/auth/session";
 
-// GET /api/strava/me -> connection status + a quick proof the token works.
+// GET /api/strava/me -> connection status + the cached 90-day summary.
 //
 // Returns `{ connected: false }` when:
 //   - the caller isn't signed in (so no per-user tokens exist), or
 //   - the caller is signed in but hasn't connected Strava yet.
 // Either way the homepage shows the "Connect with Strava" button.
+//
+// Rate-limit safety: this used to do a live athlete + 90-day pull on every
+// homepage load. It now reads the cached summary (12 h TTL, refreshed by
+// lib/strava-stats.ts) and only reports an error when there's no cache at
+// all to serve (e.g. first load after connect while Strava is down).
 export async function GET() {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ connected: false });
@@ -16,30 +21,18 @@ export async function GET() {
   const stored = await loadStravaTokens(user.id);
   if (!stored) return NextResponse.json({ connected: false });
 
-  try {
-    const tokens = await getFreshTokens(stored);
-    if (tokens.access_token !== stored.access_token) {
-      // Refresh path: persist the rotated token. Athlete object is absent on
-      // refresh — saveStravaTokens preserves the existing athlete_id.
-      await saveStravaTokens(user.id, tokens);
-    }
-
-    const [athlete, runs] = await Promise.all([
-      getAthlete(tokens.access_token),
-      getRecentRuns(tokens.access_token),
-    ]);
-    const totalMeters = runs.reduce((s, r) => s + r.distance, 0);
-
-    return NextResponse.json({
-      connected: true,
-      athlete: { name: `${athlete.firstname} ${athlete.lastname}`.trim() },
-      runs: {
-        last90Days: runs.length,
-        totalMiles: Math.round((totalMeters / 1609.34) * 10) / 10,
-      },
-    });
-  } catch (e) {
-    console.error(e);
+  const summary = await getStravaSummary(user.id);
+  if (!summary) {
+    // Connected, but the first refresh failed — nothing cached to show.
     return NextResponse.json({ connected: true, error: "strava_fetch_failed" }, { status: 502 });
   }
+
+  return NextResponse.json({
+    connected: true,
+    athlete: { name: summary.athleteName ?? "" },
+    runs: {
+      last90Days: summary.runsLast90,
+      totalMiles: summary.milesLast90,
+    },
+  });
 }

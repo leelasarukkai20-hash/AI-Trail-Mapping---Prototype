@@ -12,6 +12,12 @@ export async function GET(_req: Request, props: { params: Promise<{ id: string }
 }
 
 export async function PUT(req: Request, props: { params: Promise<{ id: string }> }) {
+  // Route edits are a local founder workflow (/curate writes to the repo's
+  // route-library via the filesystem). Deployed environments must never expose
+  // an open write endpoint — route content changes go through git.
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "not found" }, { status: 404 });
+  }
   const params = await props.params;
   let body: { properties?: RouteProperties };
   try {

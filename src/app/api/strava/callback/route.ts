@@ -3,6 +3,7 @@ import { exchangeCodeForTokens } from "@/lib/strava";
 import { consumeOAuthState } from "@/lib/oauth-state";
 import { saveStravaTokens } from "@/lib/strava-store";
 import { getCurrentUser } from "@/lib/auth/session";
+import { isInvited } from "@/lib/auth/invites";
 
 // GET /api/strava/callback?code=...&state=...&scope=...
 // Strava redirects here after the user grants (or denies) access.
@@ -32,6 +33,12 @@ export async function GET(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) {
     return NextResponse.redirect(`${base}/auth/sign-in`);
+  }
+
+  // Defensive mirror of the /authorize gate: only provisioned (invited) users
+  // may persist Strava tokens.
+  if (!(await isInvited(user.id))) {
+    return NextResponse.redirect(`${base}/onboarding/invite`);
   }
 
   // Verify Strava granted the scopes we need. The granted scopes come back as

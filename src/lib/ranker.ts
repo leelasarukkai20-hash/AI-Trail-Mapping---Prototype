@@ -165,10 +165,19 @@ export type MatchConfidence = "good" | "low";
 /**
  * How well the top pick satisfies what the user asked for, relative to the best
  * it could have scored. "low" => the UI should frame it as a "closest match".
- * Filter-only prompts (just region/dogs) have no scoring ceiling, so they're "good".
+ *
+ * Zero-ceiling intents split two ways:
+ *  - Filter-only prompts (just region and/or dogs): the hard filter fully
+ *    satisfies the ask, so every returned route is a real match -> "good".
+ *  - No constraints at all (vague prompt): the scorer had nothing to match,
+ *    so the ordering is arbitrary -> "low", so the UI invites more detail
+ *    instead of presenting an arbitrary pick as a real recommendation.
  */
 export function matchConfidence(topScore: number, intent: Intent): MatchConfidence {
   const ceiling = scoreCeiling(intent);
-  if (ceiling === 0) return "good";
+  if (ceiling === 0) {
+    const hasHardFilter = intent.region != null || intent.dogs_allowed === true;
+    return hasHardFilter ? "good" : "low";
+  }
   return topScore / ceiling >= 0.35 ? "good" : "low";
 }

@@ -232,6 +232,28 @@ export const rankingCases: RankingCase[] = [
         detail: `returned=${r.length} (expected 0 with all Stinson Beach routes closed)` };
     },
   },
+  {
+    id: "RK-17",
+    title: "vague prompt -> no constraints reads as low confidence (arbitrary pick)",
+    prompt: "Recommend me a great run",
+    intent: {},
+    assert: (r, intent) => {
+      if (!r.length) return { pass: false, detail: "no routes returned" };
+      const conf = matchConfidence(r[0].score, intent);
+      return { pass: conf === "low", detail: `confidence=${conf} (top=${props(r[0]).id})` };
+    },
+  },
+  {
+    id: "RK-18",
+    title: "filter-only prompt -> region/dogs hard filter still reads as good",
+    prompt: "Anything around Stinson",
+    intent: { region: "Stinson Beach" },
+    assert: (r, intent) => {
+      if (!r.length) return { pass: false, detail: "no routes returned" };
+      const conf = matchConfidence(r[0].score, intent);
+      return { pass: conf === "good", detail: `confidence=${conf} (${r.length} in-region routes)` };
+    },
+  },
 ];
 
 export const intentCases: IntentCase[] = [

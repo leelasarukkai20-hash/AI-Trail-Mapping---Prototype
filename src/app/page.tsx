@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import type { Route } from "../../route-library/types/route";
 import type { Intent } from "@/lib/intent";
 import type { WeatherSnapshot } from "@/lib/weather";
@@ -17,6 +18,11 @@ interface MeResponse {
   athlete?: { name: string } | null;
   runs?: { last90Days: number; totalMiles: number };
   error?: string;
+}
+
+interface AccountResponse {
+  user: { email: string } | null;
+  invited: boolean;
 }
 
 interface ScoredRouteResponse {
@@ -41,6 +47,10 @@ const BANNERS: Record<string, { kind: string; text: string }> = {
   error: { kind: "err", text: "Something went wrong connecting to Strava. Try again." },
 };
 
+const INVITE_BANNERS: Record<string, { kind: string; text: string }> = {
+  redeemed: { kind: "ok", text: "You're in! Connect Strava below to personalize your pace." },
+};
+
 const SAMPLE_PROMPTS = [
   "Easy hour with my dog",
   "Long Sunday with ocean views",
@@ -50,6 +60,7 @@ const SAMPLE_PROMPTS = [
 
 export default function Home() {
   const [me, setMe] = useState<MeResponse | null>(null);
+  const [account, setAccount] = useState<AccountResponse | null>(null);
   const [prompt, setPrompt] = useState("");
   const [banner, setBanner] = useState<{ kind: string; text: string } | null>(null);
   const [loading, setLoading] = useState(false);
@@ -60,18 +71,31 @@ export default function Home() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const s = params.get("strava");
+    const invite = params.get("invite");
     if (s && BANNERS[s]) setBanner(BANNERS[s]);
-    if (s) window.history.replaceState({}, "", "/");
+    if (invite && INVITE_BANNERS[invite]) setBanner(INVITE_BANNERS[invite]);
+    if (s || invite) window.history.replaceState({}, "", "/");
 
     fetch("/api/strava/me")
       .then((r) => r.json())
       .then(setMe)
       .catch(() => setMe({ connected: false }));
+    fetch("/api/me")
+      .then((r) => r.json())
+      .then(setAccount)
+      .catch(() => setAccount({ user: null, invited: false }));
   }, []);
 
   async function disconnect() {
     await fetch("/api/strava/disconnect", { method: "POST" });
     setMe({ connected: false });
+  }
+
+  async function signOut() {
+    const { authClient } = await import("@/lib/auth/client");
+    await authClient.signOut();
+    // Full navigation so all server-read auth state resets.
+    window.location.assign("/");
   }
 
   async function findRoute(promptOverride?: string) {
@@ -107,6 +131,16 @@ export default function Home() {
 
   return (
     <main>
+      <div className="topbar">
+        {account?.user ? (
+          <>
+            <span className="muted">{account.user.email}</span>
+            <button className="btn-link" onClick={signOut}>Sign out</button>
+          </>
+        ) : account ? (
+          <Link className="btn-link" href="/auth/sign-in">Sign in</Link>
+        ) : null}
+      </div>
       <h1>Where do you want to run?</h1>
       <p className="sub">Curated Marin trail routes, matched to your prompt and personalized to your Strava.</p>
 
@@ -165,6 +199,15 @@ export default function Home() {
             </div>
             <button className="btn-ghost" onClick={disconnect}>Disconnect</button>
           </div>
+        ) : account?.user && !account.invited ? (
+          <div>
+            <div className="status warn" style={{ marginBottom: 12 }}>
+              The pilot is invite-only. Redeem your invite code to unlock Strava personalization.
+            </div>
+            <Link className="btn-primary" style={{ display: "inline-block", width: "auto", textDecoration: "none" }} href="/onboarding/invite">
+              Enter invite code
+            </Link>
+          </div>
         ) : (
           <div>
             <div className="status warn" style={{ marginBottom: 12 }}>
@@ -173,6 +216,11 @@ export default function Home() {
             <a className="btn-strava" href="/api/strava/authorize">
               <StravaMark /> Connect with Strava
             </a>
+            {!account?.user && (
+              <div className="muted" style={{ marginTop: 8 }}>
+                You’ll be asked to sign in first.
+              </div>
+            )}
           </div>
         )}
       </div>

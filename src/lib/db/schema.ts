@@ -19,7 +19,7 @@
  *                      the predicted-vs-actual measurement in Layer 2)
  *   feedback         - thumbs, split into "good match" vs "good route" (FE6)
  */
-import { pgTable, text, uuid, bigint, timestamp, boolean, jsonb, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, bigint, timestamp, boolean, jsonb, integer, doublePrecision } from "drizzle-orm/pg-core";
 
 // `user_id` columns hold a Neon Auth user id (neon_auth.users_sync.id), stored as text.
 //
@@ -46,6 +46,14 @@ export const stravaTokens = pgTable("strava_tokens", {
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
   scope: text("scope"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  // Cached 90-day activity summary, refreshed at most every STATS_TTL (see
+  // lib/strava-stats.ts). Keeps /me and /recommend off Strava's rate limits:
+  // without this, every homepage load + prompt did a full 90-day pull.
+  athleteName: text("athlete_name"),
+  avgPaceMinPerKm: doublePrecision("avg_pace_min_per_km"), // null = no usable runs
+  runsLast90: integer("runs_last_90"),
+  metersLast90: doublePrecision("meters_last_90"),
+  statsRefreshedAt: timestamp("stats_refreshed_at", { withTimezone: true }), // null = never computed
 });
 
 export const prompts = pgTable("prompts", {

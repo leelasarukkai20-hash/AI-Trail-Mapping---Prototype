@@ -360,3 +360,11 @@ button:active { transform: translateY(1px); }
   display: inline-block;
   cursor: pointer;
 }
+
+/* Feedback thumbs (good match vs good route) */
+.feedback-block { border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.feedback-q { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
+.thumbs { display: flex; gap: 6px; }
+.thumb { background: var(--inset); border: 1px solid var(--border-strong); border-radius: 8px; padding: 4px 10px; font-size: 15px; cursor: pointer; line-height: 1; }
+.thumb:hover { border-color: var(--text); }
+.thumb.selected { border-color: var(--accent); background: var(--accent-soft); }

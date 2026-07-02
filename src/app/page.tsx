@@ -38,6 +38,7 @@ interface RecommendResponse {
   alternates: ScoredRouteResponse[];
   confidence?: "good" | "low";
   avg_pace_min_per_km: number | null;
+  recommendation_id?: string | null;
 }
 
 const BANNERS: Record<string, { kind: string; text: string }> = {
@@ -259,7 +260,7 @@ function Results({
             </div>
           )}
           <div className="results-header">{data.confidence === "low" ? "Closest match" : "Top match"}</div>
-          <ResultCard r={data.top} top expanded={expandedId === data.top.route.properties.id} onToggle={onToggle} />
+          <ResultCard r={data.top} top expanded={expandedId === data.top.route.properties.id} onToggle={onToggle} recommendationId={data.recommendation_id ?? null} />
           {data.alternates.length > 0 && (
             <>
               <div className="results-header">Alternates</div>
@@ -269,6 +270,7 @@ function Results({
                   r={alt}
                   expanded={expandedId === alt.route.properties.id}
                   onToggle={onToggle}
+                  recommendationId={data.recommendation_id ?? null}
                 />
               ))}
             </>
@@ -286,11 +288,13 @@ function ResultCard({
   top,
   expanded,
   onToggle,
+  recommendationId,
 }: {
   r: ScoredRouteResponse;
   top?: boolean;
   expanded: boolean;
   onToggle: (id: string) => void;
+  recommendationId: string | null;
 }) {
   const p = r.route.properties;
   const miles = (p.distance_km * 0.621371).toFixed(1);
@@ -310,12 +314,12 @@ function ResultCard({
           <div className="result-eta">~{r.estimated_minutes} min at your recent pace</div>
         )}
       </button>
-      {expanded && <ResultDetail r={r} />}
+      {expanded && <ResultDetail r={r} recommendationId={recommendationId} />}
     </div>
   );
 }
 
-function ResultDetail({ r }: { r: ScoredRouteResponse }) {
+function ResultDetail({ r, recommendationId }: { r: ScoredRouteResponse; recommendationId: string | null }) {
   const p = r.route.properties;
   const miles = (p.distance_km * 0.621371).toFixed(1);
   const feet = Math.round(p.gain_m * 3.281);
@@ -389,7 +393,53 @@ function ResultDetail({ r }: { r: ScoredRouteResponse }) {
         )}
         <a className="gpx-link" href={`/api/routes/${p.id}/gpx`}>↓ Download GPX</a>
       </div>
+
+      {recommendationId && <FeedbackRow recommendationId={recommendationId} routeId={p.id} />}
     </div>
+  );
+}
+
+// Thumbs for the pilot's key success signal, kept as two separate questions on
+// purpose: "good match" grades the ENGINE (did we understand the ask?), "good
+// route" grades the LIBRARY (is the route itself worth running?). Each click
+// posts immediately — no submit button — and re-clicks just log a newer row.
+function FeedbackRow({ recommendationId, routeId }: { recommendationId: string; routeId: string }) {
+  const [goodMatch, setGoodMatch] = useState<boolean | null>(null);
+  const [goodRoute, setGoodRoute] = useState<boolean | null>(null);
+  const [sent, setSent] = useState(false);
+
+  function send(field: "good_match" | "good_route", value: boolean) {
+    if (field === "good_match") setGoodMatch(value);
+    else setGoodRoute(value);
+    setSent(true);
+    fetch("/api/feedback", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ recommendation_id: recommendationId, route_id: routeId, [field]: value }),
+    }).catch(() => {});
+  }
+
+  return (
+    <div className="feedback-block">
+      <div className="feedback-q">
+        <span>Good match for what you asked?</span>
+        <ThumbPair value={goodMatch} onPick={(v) => send("good_match", v)} />
+      </div>
+      <div className="feedback-q">
+        <span>Good route?</span>
+        <ThumbPair value={goodRoute} onPick={(v) => send("good_route", v)} />
+      </div>
+      {sent && <div className="muted">Thanks — noted.</div>}
+    </div>
+  );
+}
+
+function ThumbPair({ value, onPick }: { value: boolean | null; onPick: (v: boolean) => void }) {
+  return (
+    <span className="thumbs">
+      <button type="button" aria-label="Thumbs up" className={`thumb${value === true ? " selected" : ""}`} onClick={() => onPick(true)}>👍</button>
+      <button type="button" aria-label="Thumbs down" className={`thumb${value === false ? " selected" : ""}`} onClick={() => onPick(false)}>👎</button>
+    </span>
   );
 }
 

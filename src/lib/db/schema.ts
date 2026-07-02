@@ -56,6 +56,20 @@ export const stravaTokens = pgTable("strava_tokens", {
   statsRefreshedAt: timestamp("stats_refreshed_at", { withTimezone: true }), // null = never computed
 });
 
+// Cold-start personalization for users without Strava: a self-reported
+// easy/flat pace. The pace chain in /api/recommend is Strava cache ->
+// self-reported -> none (see getEffectivePace). Kept in its own table because
+// Neon Auth owns the users table (neon_auth.users_sync) and we never touch it.
+export const runnerProfiles = pgTable("runner_profiles", {
+  userId: text("user_id").primaryKey(), // Neon Auth user id
+  // Easy/flat pace in min/km (engine units; the UI converts from min/mile).
+  // "Easy/flat" matters: the ETA model adds a gain penalty on top, so a hilly
+  // average here would double-count climbing.
+  selfReportedPaceMinPerKm: doublePrecision("self_reported_pace_min_per_km").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export const prompts = pgTable("prompts", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: text("user_id"), // Neon Auth user id (nullable for pre-sign-in prompts)

@@ -23,6 +23,7 @@ interface MeResponse {
 interface AccountResponse {
   user: { email: string } | null;
   invited: boolean;
+  self_pace_min_per_km: number | null;
 }
 
 interface ScoredRouteResponse {
@@ -38,6 +39,7 @@ interface RecommendResponse {
   alternates: ScoredRouteResponse[];
   confidence?: "good" | "low";
   avg_pace_min_per_km: number | null;
+  pace_source?: "strava" | "self_reported" | null;
   recommendation_id?: string | null;
 }
 
@@ -85,7 +87,7 @@ export default function Home() {
     fetch("/api/me")
       .then((r) => r.json())
       .then(setAccount)
-      .catch(() => setAccount({ user: null, invited: false }));
+      .catch(() => setAccount({ user: null, invited: false, self_pace_min_per_km: null }));
   }, []);
 
   async function disconnect() {
@@ -223,6 +225,14 @@ export default function Home() {
                 You’ll be asked to sign in first.
               </div>
             )}
+            {account?.user && account.invited && (
+              <SelfPaceEditor
+                current={account.self_pace_min_per_km}
+                onSaved={(pace) =>
+                  setAccount((a) => (a ? { ...a, self_pace_min_per_km: pace } : a))
+                }
+              />
+            )}
           </div>
         )}
       </div>
@@ -265,7 +275,7 @@ function Results({
             </div>
           )}
           <div className="results-header">{data.confidence === "low" ? "Closest match" : "Top match"}</div>
-          <ResultCard r={data.top} top expanded={expandedId === data.top.route.properties.id} onToggle={onToggle} recommendationId={data.recommendation_id ?? null} />
+          <ResultCard r={data.top} top expanded={expandedId === data.top.route.properties.id} onToggle={onToggle} recommendationId={data.recommendation_id ?? null} paceSource={data.pace_source ?? null} />
           {data.alternates.length > 0 && (
             <>
               <div className="results-header">Alternates</div>
@@ -276,6 +286,7 @@ function Results({
                   expanded={expandedId === alt.route.properties.id}
                   onToggle={onToggle}
                   recommendationId={data.recommendation_id ?? null}
+                  paceSource={data.pace_source ?? null}
                 />
               ))}
             </>
@@ -294,12 +305,14 @@ function ResultCard({
   expanded,
   onToggle,
   recommendationId,
+  paceSource,
 }: {
   r: ScoredRouteResponse;
   top?: boolean;
   expanded: boolean;
   onToggle: (id: string) => void;
   recommendationId: string | null;
+  paceSource: "strava" | "self_reported" | null;
 }) {
   const p = r.route.properties;
   const miles = (p.distance_km * 0.621371).toFixed(1);
@@ -316,7 +329,9 @@ function ResultCard({
         <div className="result-stats">{miles} mi {p.shape} · {feet} ft gain · {p.region} · {p.difficulty}</div>
         <div className="result-rationale">{r.rationale}</div>
         {r.estimated_minutes != null && !expanded && (
-          <div className="result-eta">~{r.estimated_minutes} min at your recent pace</div>
+          <div className="result-eta">
+            ~{r.estimated_minutes} min at your {paceSource === "self_reported" ? "reported" : "recent"} pace
+          </div>
         )}
       </button>
       {expanded && <ResultDetail r={r} recommendationId={recommendationId} />}
@@ -435,6 +450,87 @@ function FeedbackRow({ recommendationId, routeId }: { recommendationId: string; 
         <ThumbPair value={goodRoute} onPick={(v) => send("good_route", v)} />
       </div>
       {sent && <div className="muted">Thanks — noted.</div>}
+    </div>
+  );
+}
+
+// Cold-start pace: presets in min/mile (how US runners think), stored as
+// min/km (how the engine thinks). "Easy pace on flat ground" phrasing matters:
+// the ETA model adds its own climbing penalty, so a hilly average here would
+// double-count vert.
+const PACE_PRESETS_MIN_PER_MILE = [7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 12, 13];
+const KM_PER_MILE = 1.60934;
+
+function fmtMinPerMile(minPerMile: number): string {
+  const m = Math.floor(minPerMile);
+  const s = Math.round((minPerMile - m) * 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function SelfPaceEditor({
+  current,
+  onSaved,
+}: {
+  current: number | null; // min/km, as stored
+  onSaved: (paceMinPerKm: number) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [choice, setChoice] = useState("10");
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  if (!editing) {
+    return (
+      <div className="muted" style={{ marginTop: 10 }}>
+        {current != null ? (
+          <>
+            No Strava? We&rsquo;re using your reported easy pace: {fmtMinPerMile(current * KM_PER_MILE)} /mi.{" "}
+            <button className="btn-link" onClick={() => setEditing(true)}>Change</button>
+          </>
+        ) : (
+          <>
+            No Strava?{" "}
+            <button className="btn-link" onClick={() => setEditing(true)}>Tell us your pace instead</button>
+          </>
+        )}
+      </div>
+    );
+  }
+
+  async function save() {
+    setSaving(true);
+    setErr(null);
+    const paceMinPerKm = Math.round((parseFloat(choice) / KM_PER_MILE) * 100) / 100;
+    try {
+      const res = await fetch("/api/profile/pace", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ pace_min_per_km: paceMinPerKm }),
+      });
+      if (!res.ok) throw new Error((await res.json()).error ?? "Couldn’t save — try again.");
+      onSaved(paceMinPerKm);
+      setEditing(false);
+    } catch (e) {
+      setErr((e as Error).message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div style={{ marginTop: 10 }}>
+      <label htmlFor="self-pace" className="muted">Your easy-run pace on flat ground:</label>
+      <div className="pace-editor">
+        <select id="self-pace" value={choice} onChange={(e) => setChoice(e.target.value)}>
+          {PACE_PRESETS_MIN_PER_MILE.map((p) => (
+            <option key={p} value={String(p)}>{fmtMinPerMile(p)} /mi</option>
+          ))}
+        </select>
+        <button className="btn-ghost" disabled={saving} onClick={save}>
+          {saving ? "Saving…" : "Save"}
+        </button>
+      </div>
+      {err && <div className="status err" style={{ marginTop: 4 }}>{err}</div>}
     </div>
   );
 }

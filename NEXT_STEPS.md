@@ -24,6 +24,10 @@ Where the build actually is, and what's left to a live, invite-only Marin pilot.
 - **Data loop:** every prompt + recommendation persisted (including
   out-of-coverage and no-match); feedback thumbs on every result card, split into
   "good match" (engine quality) vs "good route" (library quality).
+- **Cold-start onboarding:** no-Strava (or won't-connect) users can self-report
+  an easy/flat pace on the landing page (`runner_profiles` table,
+  `POST /api/profile/pace`). Pace chain: Strava cache → self-reported → none;
+  the ETA label says "reported" vs "recent" pace accordingly.
 - **Compliance drafts:** privacy + terms pages (linked from the landing footer)
   aligned with actual data practices; placeholders remain (see below).
 - **Eval harness** (`evals/`, `npm run eval`): 18 ranking + 17 intent cases;
@@ -46,7 +50,6 @@ Where the build actually is, and what's left to a live, invite-only Marin pilot.
 
 - **Strava webhook** (`api/strava/webhook`): event-driven stats refresh instead
   of TTL polling; the cache layer stays as the fallback.
-- **Cold-start onboarding** for no-Strava users (3–4 questions → default pace).
 - **Promote or drop** the last draft route (`point-reyes-point-to-point`).
 
 ## Validate, then launch

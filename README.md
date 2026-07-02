@@ -7,8 +7,7 @@ library — with a personalized pace estimate from your Strava history and a
 rationale grounded in real route data.
 
 **Status:** feature-complete for the pilot except the grade-aware pace model
-(fit in `pace-model/`, not yet wired in) and cold-start onboarding for
-no-Strava users. See the launch checklist below.
+(fit in `pace-model/`, not yet wired in). See the launch checklist below.
 
 ## How it works
 
@@ -16,8 +15,9 @@ prompt → intent parse (Claude Haiku, structured output) → deterministic rank
 over 52 curated GeoJSON routes (active-only + closure safety filters) → top +
 alternates with map, weather, GPX export, and feedback thumbs. Sign-in is Neon
 Auth email OTP, gated by single-use invite codes; per-user Strava tokens and a
-12 h-TTL stats cache live in Neon Postgres. Every prompt, recommendation, and
-thumb is persisted — that's the pilot's learning data.
+12 h-TTL stats cache live in Neon Postgres. Users without Strava can
+self-report an easy pace instead. Every prompt, recommendation, and thumb is
+persisted — that's the pilot's learning data.
 
 Deeper docs:
 

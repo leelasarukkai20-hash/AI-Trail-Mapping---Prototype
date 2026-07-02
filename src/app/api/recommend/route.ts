@@ -1,26 +1,68 @@
 import { NextResponse } from "next/server";
 import { listRoutes } from "@/lib/routes";
-import { parseIntent, withDerivedDistance } from "@/lib/intent";
-import { rankRoutes, matchConfidence, type ScoredRoute } from "@/lib/ranker";
+import { parseIntent, withDerivedDistance, type Intent } from "@/lib/intent";
+import { rankRoutes, matchConfidence, type ScoredRoute, type MatchConfidence } from "@/lib/ranker";
 import { estimateMovingTimeMinutes } from "@/lib/pace";
 import { getStravaSummary } from "@/lib/strava-stats";
 import { getCurrentUser } from "@/lib/auth/session";
+import { db, schema } from "@/lib/db/client";
 
 export const dynamic = "force-dynamic";
 
 type RecommendedRoute = ScoredRoute & { estimated_minutes: number | null };
 
-async function getUserAvgPace(): Promise<number | null> {
+async function getUserAvgPace(userId: string | null): Promise<number | null> {
   // Pace personalization is only available to signed-in users with Strava
   // connected. Logged-out callers still get recommendations, just without
   // a personal pace. Reads the cached 90-day summary (12 h TTL) instead of
   // pulling from Strava on every prompt — see lib/strava-stats.ts.
-  const user = await getCurrentUser();
-  if (!user) return null;
+  if (!userId) return null;
   try {
-    const summary = await getStravaSummary(user.id);
+    const summary = await getStravaSummary(userId);
     return summary?.avgPaceMinPerKm ?? null;
   } catch {
+    return null;
+  }
+}
+
+/**
+ * Persist what was asked and what we answered (the pilot's measurement data:
+ * feedback thumbs reference the recommendation row, and predicted_minutes is
+ * the "predicted" half of predicted-vs-actual). Best-effort by design — a
+ * logging failure must never break the recommendation itself.
+ *
+ * Anonymous usage is logged with user_id null: what logged-out visitors ask
+ * for (and whether we could answer) is exactly the demand signal the pilot
+ * wants, and a prompt is not personal data tied to an identity.
+ */
+async function logRecommendation(args: {
+  userId: string | null;
+  promptText: string;
+  intent: Intent;
+  top: RecommendedRoute | null;
+  alternates: RecommendedRoute[];
+  confidence: MatchConfidence | null;
+}): Promise<string | null> {
+  try {
+    const [promptRow] = await db
+      .insert(schema.prompts)
+      .values({ userId: args.userId, text: args.promptText })
+      .returning({ id: schema.prompts.id });
+    const [rec] = await db
+      .insert(schema.recommendations)
+      .values({
+        promptId: promptRow.id,
+        userId: args.userId,
+        intent: args.intent,
+        topRouteId: args.top?.route.properties.id ?? null,
+        alternateRouteIds: args.alternates.map((a) => a.route.properties.id),
+        confidence: args.confidence,
+        predictedMinutes: args.top?.estimated_minutes ?? null,
+      })
+      .returning({ id: schema.recommendations.id });
+    return rec.id;
+  } catch (e) {
+    console.error("recommendation logging failed:", e);
     return null;
   }
 }
@@ -35,10 +77,16 @@ export async function POST(req: Request) {
   const prompt = body.prompt?.trim();
   if (!prompt) return NextResponse.json({ error: "prompt required" }, { status: 400 });
 
-  const [parsed, avgPace] = await Promise.all([parseIntent(prompt), getUserAvgPace()]);
+  const user = await getCurrentUser();
+  const userId = user?.id ?? null;
+  const [parsed, avgPace] = await Promise.all([parseIntent(prompt), getUserAvgPace(userId)]);
 
   // Out-of-coverage: don't force a Marin route on an out-of-area request.
   if (parsed.out_of_coverage) {
+    // Logged too: out-of-area asks tell us where demand is.
+    const recommendationId = await logRecommendation({
+      userId, promptText: prompt, intent: parsed, top: null, alternates: [], confidence: null,
+    });
     return NextResponse.json({
       intent: parsed,
       top: null,
@@ -46,6 +94,7 @@ export async function POST(req: Request) {
       out_of_coverage: true,
       message: "We only cover Marin County trails right now.",
       avg_pace_min_per_km: avgPace,
+      recommendation_id: recommendationId,
     });
   }
 
@@ -54,7 +103,13 @@ export async function POST(req: Request) {
 
   const ranked = rankRoutes(listRoutes(), intent);
   if (ranked.length === 0) {
-    return NextResponse.json({ intent, top: null, alternates: [], avg_pace_min_per_km: avgPace });
+    const recommendationId = await logRecommendation({
+      userId, promptText: prompt, intent, top: null, alternates: [], confidence: null,
+    });
+    return NextResponse.json({
+      intent, top: null, alternates: [], avg_pace_min_per_km: avgPace,
+      recommendation_id: recommendationId,
+    });
   }
 
   const withPace: RecommendedRoute[] = ranked.slice(0, 3).map((r) => ({
@@ -62,11 +117,18 @@ export async function POST(req: Request) {
     estimated_minutes: estimateMovingTimeMinutes(r.route, avgPace),
   }));
 
+  const confidence = matchConfidence(ranked[0].score, intent);
+  const recommendationId = await logRecommendation({
+    userId, promptText: prompt, intent,
+    top: withPace[0], alternates: withPace.slice(1), confidence,
+  });
+
   return NextResponse.json({
     intent,
     top: withPace[0],
     alternates: withPace.slice(1),
-    confidence: matchConfidence(ranked[0].score, intent),
+    confidence,
     avg_pace_min_per_km: avgPace,
+    recommendation_id: recommendationId,
   });
 }

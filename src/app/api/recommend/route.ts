@@ -4,6 +4,7 @@ import { parseIntent, withDerivedDistance, type Intent } from "@/lib/intent";
 import { rankRoutes, matchConfidence, type ScoredRoute, type MatchConfidence } from "@/lib/ranker";
 import { estimateMovingTimeMinutes } from "@/lib/pace";
 import { getStravaSummary } from "@/lib/strava-stats";
+import { getSelfReportedPace } from "@/lib/runner-profile";
 import { getCurrentUser } from "@/lib/auth/session";
 import { db, schema } from "@/lib/db/client";
 
@@ -11,17 +12,26 @@ export const dynamic = "force-dynamic";
 
 type RecommendedRoute = ScoredRoute & { estimated_minutes: number | null };
 
-async function getUserAvgPace(userId: string | null): Promise<number | null> {
-  // Pace personalization is only available to signed-in users with Strava
-  // connected. Logged-out callers still get recommendations, just without
-  // a personal pace. Reads the cached 90-day summary (12 h TTL) instead of
-  // pulling from Strava on every prompt — see lib/strava-stats.ts.
-  if (!userId) return null;
+type PaceSource = "strava" | "self_reported" | null;
+
+async function getEffectivePace(
+  userId: string | null
+): Promise<{ pace: number | null; source: PaceSource }> {
+  // Pace chain: Strava cache (12 h TTL, lib/strava-stats.ts) -> self-reported
+  // easy pace (cold start, lib/runner-profile.ts) -> none. Strava always wins
+  // once connected. Logged-out callers still get recommendations, just without
+  // a personal pace.
+  if (!userId) return { pace: null, source: null };
   try {
     const summary = await getStravaSummary(userId);
-    return summary?.avgPaceMinPerKm ?? null;
+    if (summary?.avgPaceMinPerKm != null) {
+      return { pace: summary.avgPaceMinPerKm, source: "strava" };
+    }
+    const selfPace = await getSelfReportedPace(userId);
+    if (selfPace != null) return { pace: selfPace, source: "self_reported" };
+    return { pace: null, source: null };
   } catch {
-    return null;
+    return { pace: null, source: null };
   }
 }
 
@@ -79,7 +89,10 @@ export async function POST(req: Request) {
 
   const user = await getCurrentUser();
   const userId = user?.id ?? null;
-  const [parsed, avgPace] = await Promise.all([parseIntent(prompt), getUserAvgPace(userId)]);
+  const [parsed, { pace: avgPace, source: paceSource }] = await Promise.all([
+    parseIntent(prompt),
+    getEffectivePace(userId),
+  ]);
 
   // Out-of-coverage: don't force a Marin route on an out-of-area request.
   if (parsed.out_of_coverage) {
@@ -94,6 +107,7 @@ export async function POST(req: Request) {
       out_of_coverage: true,
       message: "We only cover Marin County trails right now.",
       avg_pace_min_per_km: avgPace,
+      pace_source: paceSource,
       recommendation_id: recommendationId,
     });
   }
@@ -108,6 +122,7 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({
       intent, top: null, alternates: [], avg_pace_min_per_km: avgPace,
+      pace_source: paceSource,
       recommendation_id: recommendationId,
     });
   }
@@ -129,6 +144,7 @@ export async function POST(req: Request) {
     alternates: withPace.slice(1),
     confidence,
     avg_pace_min_per_km: avgPace,
+    pace_source: paceSource,
     recommendation_id: recommendationId,
   });
 }

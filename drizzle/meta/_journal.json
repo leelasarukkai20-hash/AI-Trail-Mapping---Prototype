@@ -15,6 +15,13 @@
       "when": 1782948620204,
       "tag": "0001_naive_loa",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782960091020,
+      "tag": "0002_far_naoko",
+      "breakpoints": true
     }
   ]
 }

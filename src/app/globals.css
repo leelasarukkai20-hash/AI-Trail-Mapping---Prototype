@@ -368,3 +368,10 @@ button:active { transform: translateY(1px); }
 .thumb { background: var(--inset); border: 1px solid var(--border-strong); border-radius: 8px; padding: 4px 10px; font-size: 15px; cursor: pointer; line-height: 1; }
 .thumb:hover { border-color: var(--text); }
 .thumb.selected { border-color: var(--accent); background: var(--accent-soft); }
+
+/* Cold-start self-reported pace editor */
+.pace-editor { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+.pace-editor select {
+  background: var(--inset); border: 1px solid var(--border-strong); border-radius: 8px;
+  padding: 8px 10px; font-size: 14px; color: var(--text); font-family: inherit;
+}

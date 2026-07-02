@@ -53,9 +53,13 @@ Both work in this one repo; the route library lives under `route-library/`.
   `drizzle/`. `user_id` columns are `text` (Neon Auth ids — decided, don't
   revisit). drizzle-kit is scoped to the `public` schema; never touch
   `neon_auth.*`.
-- **Personalization:** pace ETA from the cached 90-day Strava average
-  (`lib/pace.ts`). NOTE: still the simple stub (avg pace + flat per-meter gain
-  penalty); the grade-aware model in `pace-model/` is fit but not yet wired in.
+- **Personalization:** pace ETA from the cached 90-day Strava average, with a
+  cold-start fallback for no-Strava users — a self-reported easy/flat pace
+  (`runner_profiles` table, `lib/runner-profile.ts`, `POST /api/profile/pace`,
+  editor on the landing-page Strava card). Chain: Strava → self-reported →
+  none; `pace_source` in the recommend response drives the ETA label. NOTE:
+  ETA math is still the simple stub (`lib/pace.ts`: avg pace + flat per-meter
+  gain penalty); the grade-aware model in `pace-model/` is fit but not wired in.
 - **Conditions:** NOAA weather (`lib/weather.ts`); **map + panel**
   (`components/RouteMap.tsx`, Mapbox GL JS); **GPX export**
   (`GET /api/routes/[id]/gpx`).
@@ -72,7 +76,6 @@ Both work in this one repo; the route library lives under `route-library/`.
 **Not done yet (see NEXT_STEPS.md):**
 - Wire the pace-on-grade model (`pace-model/` — Leela) into `lib/pace.ts`.
 - Strava webhook (event-driven stats refresh; TTL cache is the current guard).
-- Cold-start onboarding for no-Strava users.
 - Compliance placeholders + launch ops (seed real invites, dogfood, send).
 
 ## Architecture
@@ -111,7 +114,8 @@ src/
     api/
       recommend/route.ts    # intent -> rank -> top + alternates; logs rows
       feedback/route.ts     # thumbs -> feedback table
-      me/route.ts           # { user, invited } for the header
+      profile/pace/         # self-reported pace (cold start, invited only)
+      me/route.ts           # { user, invited, self_pace } for the header
       invite/redeem/        # race-safe invite redemption
       routes/...            # GET routes / [id] / gpx; PUT [id] is DEV-ONLY
       weather/route.ts      # NOAA forecast for a lat/lon
@@ -125,6 +129,7 @@ src/
     strava.ts               # OAuth + API helpers, refresh, deauthorize, 429
     strava-store.ts         # per-user token rows (strava_tokens)
     strava-stats.ts         # cached 90-day summary, 12 h TTL, stale-on-429
+    runner-profile.ts       # self-reported pace (cold-start fallback)
     oauth-state.ts          # CSRF state cookie for the OAuth round-trip
     auth/{server,client,session,invites}.ts   # Neon Auth + helpers
     db/{client,schema}.ts   # Drizzle over Neon
@@ -158,7 +163,6 @@ evals/                      # eval harness (npm run eval): 18 ranking + 17 inten
 
 - `lib/pace.ts`: stub; swap in the `pace-model/` grade-aware model (with Leela).
 - `api/strava/webhook`: not built; the 12 h stats cache is the interim guard.
-- Cold-start onboarding (no-Strava default pace) not built.
 - `src/app/privacy/page.tsx` + `terms/page.tsx`: EFFECTIVE_DATE / CONTACT_EMAIL
   placeholders; liability clause needs counsel.
 - `route-library/closures.json`: hand-maintained; review weekly (current entry

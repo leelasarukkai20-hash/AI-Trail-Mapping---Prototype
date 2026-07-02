@@ -27,11 +27,13 @@ export default function PrivacyPage() {
       <h2>What we collect</h2>
       <ul>
         <li><strong>Your email</strong> — to sign you in and contact you about the pilot.</li>
-        <li><strong>Strava data</strong> (only if you connect Strava): your recent activities
-          (distance, time, elevation, pace) and basic profile, used to personalize pace estimates.
-          We request read-only access.</li>
-        <li><strong>Your prompts and feedback</strong> — the run requests you type and the ratings
-          you give, used to improve recommendations.</li>
+        <li><strong>Strava data</strong> (only if you connect Strava): we read your recent activities
+          (distance, time, elevation, pace) and basic profile with read-only access. What we{" "}
+          <em>store</em> is your connection tokens and a 90-day summary — average pace, run count,
+          total mileage, and your Strava name — not your individual activities.</li>
+        <li><strong>Your prompts and feedback</strong> — the run requests you type, the
+          recommendations we returned, and the ratings you give, used to improve recommendations.
+          Prompts typed while signed out are stored without any link to you.</li>
         <li>Basic technical and usage data needed to run and secure the service.</li>
       </ul>
 
@@ -45,15 +47,17 @@ export default function PrivacyPage() {
       <p>
         We share data only with providers that help us operate, under their terms: Strava (the
         activity data you connect), Anthropic (processes your prompt text to understand your request),
-        Mapbox (maps), and Vercel, Neon, and Resend (hosting, database, and email). We do not sell or
-        share your data for advertising.
+        Mapbox (maps), and Vercel and Neon (hosting, database, and sign-in). Weather shown in the app
+        comes from NOAA using the route&rsquo;s location, not yours. We do not sell or share your data
+        for advertising.
       </p>
 
       <h2>Retention and deletion</h2>
       <p>
-        You can disconnect Strava at any time, which revokes our access and deletes the Strava data we
-        stored for you. You can request deletion of your account and associated data by emailing{" "}
-        {CONTACT_EMAIL}. We keep data only as long as needed for the pilot.
+        You can disconnect Strava at any time — this revokes the app&rsquo;s access on Strava&rsquo;s
+        side and deletes the tokens and activity summary we stored for you. You can request deletion
+        of your account and associated data by emailing {CONTACT_EMAIL}. We keep data only as long as
+        needed for the pilot.
       </p>
 
       <h2>Security</h2>

@@ -1,5 +1,12 @@
 # Layer 1 completion — "make auth real" (handoff for Claude Code)
 
+> **✅ COMPLETED (July 2026).** All work items landed: WI-5/1/3 in PR #11,
+> WI-2 in PR #12, WI-4/6/7 + curate lockdown in PR #13. The open decisions in
+> §5 were resolved (single-use seeded codes; logged-out prompting stays;
+> anonymous logging ON; athlete name re-fetched, later cached with the stats).
+> Kept for historical context only — see CLAUDE.md / NEXT_STEPS.md for current
+> state.
+
 Scope for the next chunk of work. Sign-in already works; this turns it into a
 real identity layer: persistent per-user Strava tokens, invite-only gating, and
 the plumbing a login wall will later sit on. **It intentionally stops short of

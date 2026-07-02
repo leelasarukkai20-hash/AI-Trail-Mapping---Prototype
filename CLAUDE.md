@@ -15,95 +15,121 @@ Two founders:
 - **Leela:** Strava integration + frontend.
 - **Emma:** the curated route library + the recommendation/ranking layer.
 
-Both now work in this one repo; the route library lives here under
-`route-library/` (no longer an external input).
+Both work in this one repo; the route library lives under `route-library/`.
 
 ## Current state
 
 **Built and working:**
-- Next.js (App Router, TS), mobile-first. Landing page (`page.tsx`): prompt →
-  recommendation, plus Strava connect/status.
 - **Recommendation engine, end to end:** prompt → `parseIntent` (Claude Haiku
   4.5, structured JSON output) → `rankRoutes` (deterministic scorer) → top + 2
-  alternates, via `POST /api/recommend`. The rationale is built from the score
-  breakdown — every claim maps to a real route field (grounded, not free-form).
-- **Curated route library** under `route-library/`: 52 Marin routes as GeoJSON +
-  JSON schema + TS types + tooling (scaffold/ingest/export/apply). Each route has
-  a `status` (`draft`|`active`); promotion gates what's recommendable.
-- **Safety filters in the ranker:** only `status: "active"` routes, and never a
-  route in an active closure (`route-library/closures.json` + `lib/closures.ts`).
-- **Conditions:** NOAA weather (`lib/weather.ts` + `GET /api/weather`), shown in
-  the route panel.
-- **Personalization:** pace ETA from the user's 90-day Strava average
-  (`lib/pace.ts`). NOTE: this is a simple stub (avg pace + flat per-meter gain
-  penalty), not the real pace-on-grade model yet.
-- **Map + panel:** `components/RouteMap.tsx` (Mapbox GL JS); panel shows
-  distance/gain/surface, rationale, ETA, weather, and alternates.
-- **GPX export:** `GET /api/routes/[id]/gpx`.
-- **/curate:** internal/admin tool both founders use to review, edit, and promote
-  routes (map + form, schema-validated writes back to the geojson). A backend
-  tool, not a user-facing page; relies on local filesystem writes, so it's run
-  locally rather than deployed.
-- **Strava OAuth:** authorize → callback (token exchange + CSRF) → me (90-day run
-  pull) → disconnect; token refresh + 429 handling in `lib/strava.ts`. Tokens in
-  a signed cookie (`lib/session.ts`) — SCAFFOLD ONLY.
-- **Evals:** `evals/` harness (`npm run eval`). Ranking cases run offline; intent
-  cases run with `ANTHROPIC_API_KEY`. Baseline: intent 8/8, ranking 10/10 (on
-  promoted routes).
+  alternates, via `POST /api/recommend`. Rationale is built from the score
+  breakdown — every claim maps to a real route field. Handles
+  negation/exclusions, out-of-coverage, time-budget→distance, and a
+  match-confidence signal (vague or poorly-matched prompts render as "Closest
+  match" in the UI, not a confident pick).
+- **Curated route library** under `route-library/`: 52 Marin routes (51
+  `active`, 1 `draft`) as GeoJSON + JSON schema + TS types + tooling. Only
+  `active` routes are recommendable.
+- **Safety filters in the ranker:** active-only, and never a route in an active
+  closure (`route-library/closures.json` + `lib/closures.ts`).
+- **Real auth (Layer 1, complete):** Neon Auth email-OTP sign-in (managed Better
+  Auth; `src/lib/auth/`), per-user Strava tokens in Postgres, invite-code gating
+  (`/onboarding/invite`, `src/lib/auth/invites.ts`, seed via
+  `npm run db:seed-invites`), sign-in/out header, and route-protection
+  middleware in `src/proxy.ts` (Next 16 name for middleware) — currently only
+  guards `/onboarding/*`; a commented matcher swap arms a full login wall.
+- **Strava, rate-limit safe:** OAuth authorize → callback (CSRF state cookie +
+  scope check + invite check) → disconnect (revokes via Strava deauthorize).
+  90-day stats (avg pace, run count, mileage, athlete name) are **cached in
+  Postgres with a 12 h TTL** (`lib/strava-stats.ts`); `/api/strava/me` and
+  recommend read the cache, refresh only when stale, and serve stale data if
+  Strava is down/429. Token refresh in `lib/strava.ts`.
+- **Data loop:** every prompt + recommendation persisted (`prompts`,
+  `recommendations` tables; includes out-of-coverage and no-match with
+  `top=null`; anonymous usage logged with `user_id` null). Feedback thumbs on
+  each result card → `POST /api/feedback`, split into `good_match` (engine
+  quality) vs `good_route` (library quality).
+- **DB:** Drizzle ORM over Neon Postgres (`src/lib/db/`); migrations in
+  `drizzle/`. `user_id` columns are `text` (Neon Auth ids — decided, don't
+  revisit). drizzle-kit is scoped to the `public` schema; never touch
+  `neon_auth.*`.
+- **Personalization:** pace ETA from the cached 90-day Strava average
+  (`lib/pace.ts`). NOTE: still the simple stub (avg pace + flat per-meter gain
+  penalty); the grade-aware model in `pace-model/` is fit but not yet wired in.
+- **Conditions:** NOAA weather (`lib/weather.ts`); **map + panel**
+  (`components/RouteMap.tsx`, Mapbox GL JS); **GPX export**
+  (`GET /api/routes/[id]/gpx`).
+- **/curate:** internal admin tool to review/edit/promote routes. **Dev-only:**
+  the page and `PUT /api/routes/[id]` return 404 in production (route edits
+  write to the local filesystem).
+- **Compliance drafts:** `/privacy` + `/terms` (linked from the landing footer),
+  aligned with actual data practices. EFFECTIVE_DATE / CONTACT_EMAIL
+  placeholders still need founder values + counsel review.
+- **Evals:** `evals/` harness (`npm run eval`). Baseline: 18/18 ranking
+  (offline), 17/17 intent (needs `ANTHROPIC_API_KEY`); flaky LLM cases retry
+  once and are flagged `[flaky]`.
 
 **Not done yet (see NEXT_STEPS.md):**
-- Promote routes `draft → active` (in progress) — until then the engine returns
-  no recommendations by design.
-- Persistence: Postgres + magic-link auth (Resend) + invite gating. Still the
-  signed-cookie scaffold — the demo→pilot boundary.
-- Real pace-on-grade model (Python notebook → per-user JSON) to replace the stub.
-- Strava webhook (rate-limit safety); `me` still does a live pull; no backoff on 429.
-- Matching gaps: negation/exclusions, no-match confidence flag, out-of-coverage,
-  time-budget→distance fallback.
-- Feedback thumbs, share-to-Strava, cold-start onboarding.
-- Compliance (privacy/terms + safety disclaimer) and launch ops.
+- Wire the pace-on-grade model (`pace-model/` — Leela) into `lib/pace.ts`.
+- Strava webhook (event-driven stats refresh; TTL cache is the current guard).
+- Cold-start onboarding for no-Strava users.
+- Compliance placeholders + launch ops (seed real invites, dogfood, send).
 
 ## Architecture
 
-- Frontend: Next.js + Mapbox GL JS on Vercel.
+- Frontend: Next.js 16 (App Router, TS, React 19) + Mapbox GL JS on Vercel.
+- Auth: **Neon Auth** (managed Better Auth, email OTP). No hooks/plugins
+  available — anything like invite gating is enforced app-side, post-sign-in.
+- DB: Neon Postgres via Drizzle (`drizzle-orm/neon-http`), serverless-safe.
 - Intent parsing: Claude Haiku 4.5, structured output (`@anthropic-ai/sdk`).
-- Ranking: hand-tuned TypeScript scorer (no separate service); grounded rationale.
-- Route library: GeoJSON validated by `ajv` against `route-library/schema/route.schema.json`.
+- Ranking: hand-tuned TypeScript scorer; grounded rationale.
+- Route library: GeoJSON validated by `ajv` against
+  `route-library/schema/route.schema.json`.
 - Conditions: NOAA api.weather.gov; closures as a maintained JSON file.
-- Auth (planned): magic link (Resend). DB (planned): Vercel Postgres or Supabase.
-- Strava: OAuth + (planned) webhook as serverless functions, rate-limit-aware.
-- Pace model (planned): fit in a Python notebook, stored as per-user JSON.
+- Strava: OAuth serverless routes; stats cached in Postgres (12 h TTL).
+- Pace model: fit in `pace-model/` (`fetch_streams.ts` + `fit.py` → per-user
+  JSON); integration pending.
 - Everything serverless on Vercel. No PostGIS, no long-running services in V0.
 
 ## Layout
 
 ```
-route-library/              # the curated library + tooling (see its own README)
+route-library/              # curated library + tooling (see its own README)
   routes/<id>.geojson       # 52 curated Marin routes
   schema/route.schema.json  # the route contract (ajv-validated)
-  types/route.ts            # TS mirror of the schema
-  closures.json             # maintained trail-closure list (C2)
-  scaffold/ingest/export/apply scripts
+  closures.json             # maintained trail-closure list
+pace-model/                 # grade-aware pace model fit (Leela); JSON per user
+drizzle/                    # generated SQL migrations (npm run db:migrate)
+scripts/seed-invites.ts     # seed invite codes (npm run db:seed-invites)
 src/
+  proxy.ts                  # Next 16 middleware: guards /onboarding/*; wall switch
   app/
-    page.tsx                # Landing: prompt -> recommendation + Strava connect
+    page.tsx                # landing: prompt -> recommendation, auth header, thumbs
+    (auth)/                 # Neon Auth UI route group (Tailwind scoped here ONLY)
+    onboarding/invite/      # invite-code redemption screen
+    privacy/ terms/         # compliance pages (draft)
     api/
-      recommend/route.ts    # prompt -> intent -> rank -> top + 2 alternates
-      routes/...            # GET routes, GET [id], GET [id]/gpx (export)
+      recommend/route.ts    # intent -> rank -> top + alternates; logs rows
+      feedback/route.ts     # thumbs -> feedback table
+      me/route.ts           # { user, invited } for the header
+      invite/redeem/        # race-safe invite redemption
+      routes/...            # GET routes / [id] / gpx; PUT [id] is DEV-ONLY
       weather/route.ts      # NOAA forecast for a lat/lon
       strava/{authorize,callback,me,disconnect}/route.ts
-    curate/                 # internal admin tool (both founders): review/edit/promote routes; backend, not user-facing
+      auth/[...path]/       # Neon Auth handler
+    curate/                 # internal admin tool — DEV-ONLY (404 in production)
   lib/
     intent.ts               # parseIntent (Haiku, structured output)
-    ranker.ts               # rankRoutes scorer + status/closure filters + rationale
-    closures.ts             # currently-closed route ids (reads closures.json)
-    pace.ts                 # pace ETA from Strava avg (STUB; not grade-adjusted yet)
-    weather.ts              # NOAA client
-    routes.ts               # load/validate/save routes from route-library/
-    strava.ts               # OAuth + API helpers, token refresh, 429 handling
-    session.ts              # signed-cookie token store — SCAFFOLD ONLY
-  components/RouteMap.tsx    # Mapbox GL JS map
-evals/                      # recommendation-engine eval harness (npm run eval)
+    ranker.ts               # scorer + filters + rationale + matchConfidence
+    closures.ts pace.ts weather.ts routes.ts
+    strava.ts               # OAuth + API helpers, refresh, deauthorize, 429
+    strava-store.ts         # per-user token rows (strava_tokens)
+    strava-stats.ts         # cached 90-day summary, 12 h TTL, stale-on-429
+    oauth-state.ts          # CSRF state cookie for the OAuth round-trip
+    auth/{server,client,session,invites}.ts   # Neon Auth + helpers
+    db/{client,schema}.ts   # Drizzle over Neon
+  components/RouteMap.tsx
+evals/                      # eval harness (npm run eval): 18 ranking + 17 intent
 ```
 
 ## Conventions
@@ -111,51 +137,59 @@ evals/                      # recommendation-engine eval harness (npm run eval)
 - TypeScript strict; `@/*` → `src/*`. Server code imports library types from
   `route-library/types/route`.
 - Keep `lib/strava.ts` dependency-free (Vercel serverless).
-- Secrets via env only. The app reads `.env.local` (Next convention):
-  `ANTHROPIC_API_KEY`, Strava client id/secret + `OAUTH_STATE_SECRET`,
-  `NEXT_PUBLIC_MAPBOX_TOKEN`. Never commit it.
+- Secrets via env only (`.env.local`, never committed — see `.env.example`):
+  `ANTHROPIC_API_KEY`, Strava client id/secret, `OAUTH_STATE_SECRET`,
+  `NEXT_PUBLIC_MAPBOX_TOKEN`, `DATABASE_URL`, `NEON_AUTH_BASE_URL`,
+  `NEON_AUTH_COOKIE_SECRET`, `APP_BASE_URL`.
 - Strava scopes: request only what's used (`activity:read_all`,
   `profile:read_all`); don't add `activity:write` until share-to-Strava.
 - Keep the ranker's rationale grounded — every claim maps to a real route field.
   Don't move rationale generation to a free-form LLM without a guardrail.
-- Route content is edited via the spreadsheet round-trip or `/curate`, then
-  validated with `npm run ingest` (in `route-library/`).
+- Don't hit Strava directly from request handlers — go through
+  `lib/strava-stats.ts` (the cache) so the rate-limit budget holds.
+- Tailwind v4 is scoped to `src/app/(auth)/` only; do not add global Tailwind.
+- Route content is edited via the spreadsheet round-trip or `/curate` (locally),
+  then validated with `npm run ingest` (in `route-library/`).
+- Schema changes: edit `src/lib/db/schema.ts` → `npm run db:generate` →
+  `npm run db:migrate`. Additive/nullable changes only while the pilot shares
+  one database.
 
 ## Known TODOs / swap points
 
-- `lib/session.ts` + `api/strava/callback`: replace the signed-cookie token store
-  with Postgres + per-user identity before any real user testing.
-- `api/strava/me`: live pull; move to webhook-first for the 2,000 req/day limit.
-  No backoff/queue on 429 yet.
-- `lib/pace.ts`: stub; replace with the per-user pace-on-grade model.
-- `lib/ranker.ts`: matching gaps — negation/exclusions, no-match confidence flag,
-  out-of-coverage (NEXT_STEPS item 2b).
-- Routes ship as `draft`; promote in `/curate` to make them recommendable.
-- `route-library/closures.json`: hand-maintained; verify the seeded Steep Ravine
-  entry and review weekly.
+- `lib/pace.ts`: stub; swap in the `pace-model/` grade-aware model (with Leela).
+- `api/strava/webhook`: not built; the 12 h stats cache is the interim guard.
+- Cold-start onboarding (no-Strava default pace) not built.
+- `src/app/privacy/page.tsx` + `terms/page.tsx`: EFFECTIVE_DATE / CONTACT_EMAIL
+  placeholders; liability clause needs counsel.
+- `route-library/closures.json`: hand-maintained; review weekly (current entry
+  says re-check early August 2026).
+- `point-reyes-point-to-point` is the one remaining `draft` route.
 
 ## What stays manual (a Claude session can't do these)
 
-- Registering the Strava API app (Strava website) + approving the consent screen.
-- Promoting routes to `active` (an editorial/vetting judgment).
-- Verifying real-world trail closures against official park alerts.
+- Strava API app registration/settings (Strava website).
+- Promoting routes to `active` (editorial judgment) and verifying real-world
+  closures against official park alerts.
+- Filling the compliance placeholders; sending invites.
 
 ## How to run
 
 ```
 npm install
-# create .env.local with: ANTHROPIC_API_KEY, Strava client id/secret +
-# OAUTH_STATE_SECRET, NEXT_PUBLIC_MAPBOX_TOKEN  (see STRAVA_SETUP.md for Strava)
-npm run dev          # http://localhost:3000
-npm run eval         # recommendation evals (ranking always; intent if key set)
+# create .env.local (see .env.example for every required var)
+npm run dev              # http://localhost:3000
+npm run eval             # 18 ranking cases always; 17 intent cases if key set
+npm run db:generate      # after editing src/lib/db/schema.ts
+npm run db:migrate       # apply migrations to Neon
+npm run db:seed-invites  # mint invite codes (--count/--note/--dry-run)
 ```
 
 Route-library tooling (scaffold/ingest/export/apply) lives in `route-library/`
-with its own README.
+with its own README. The `/curate` tool only works in dev.
 
 ## Good first task
 
-"Read NEXT_STEPS.md. The recommendation engine works but matching has known gaps —
-implement item 2b (negation/exclusions, a no-match confidence flag,
-out-of-coverage) in `lib/intent.ts`/`lib/ranker.ts`, add eval cases in `evals/`,
-and run `npm run eval`."
+"Read NEXT_STEPS.md. The pace estimate still uses the flat-gain stub in
+`lib/pace.ts`; the fitted grade-aware model lives in `pace-model/`. Coordinate
+the integration: load the per-user model JSON, replace
+`estimateMovingTimeMinutes`, and add eval or unit coverage for the new ETA."

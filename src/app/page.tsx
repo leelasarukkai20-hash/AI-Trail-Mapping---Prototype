@@ -230,6 +230,11 @@ export default function Home() {
       <p className="muted" style={{ textAlign: "center", marginTop: 24 }}>
         Always verify trail conditions yourself before heading out.
       </p>
+      <p className="muted" style={{ textAlign: "center", marginTop: 8 }}>
+        <Link href="/privacy" style={{ color: "inherit" }}>Privacy</Link>
+        {" · "}
+        <Link href="/terms" style={{ color: "inherit" }}>Terms</Link>
+      </p>
     </main>
   );
 }

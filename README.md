@@ -1,68 +1,77 @@
-# Marin Trails — V0 scaffold (Strava auth + frontend)
+# Marin Trails — V0 pilot
 
-Next.js (App Router) scaffold for the Marin pilot. This covers Leela's two
-workstreams from the scope doc: **Strava integration** and **frontend**. The
-route library, LLM ranking, and pace model are stubbed with clear `TODO`
-markers where they plug in.
+A trail-run recommender for Marin County, built for an invite-only pilot
+(~20–50 runners). Type what you want ("12 miles, lots of climbing, singletrack,
+ocean views") and get a top pick + 2 alternates from a hand-curated route
+library — with a personalized pace estimate from your Strava history and a
+rationale grounded in real route data.
 
-## What's here
+**Status:** feature-complete for the pilot except the grade-aware pace model
+(fit in `pace-model/`, not yet wired in) and cold-start onboarding for
+no-Strava users. See the launch checklist below.
 
-```
-src/
-  app/
-    page.tsx                     # Landing: prompt input + Strava connect/status
-    layout.tsx, globals.css      # Mobile-first shell
-    api/strava/
-      authorize/route.ts         # Step 1: redirect to Strava consent
-      callback/route.ts          # Step 2: code -> token exchange, CSRF check
-      me/route.ts                # Proof: pulls athlete + last-90-day runs
-      disconnect/route.ts        # Clears session
-    curate/                      # /curate: internal route review + edit tool
-    api/routes/                  # GET/PUT for the curate viewer
-  lib/
-    strava.ts                    # OAuth + API helpers (no deps), token refresh
-    session.ts                   # Signed-cookie token store (SCAFFOLD ONLY)
-    routes.ts                    # Filesystem + schema validation for /curate
-```
+## How it works
 
-## The curate viewer at `/curate`
+prompt → intent parse (Claude Haiku, structured output) → deterministic ranker
+over 52 curated GeoJSON routes (active-only + closure safety filters) → top +
+alternates with map, weather, GPX export, and feedback thumbs. Sign-in is Neon
+Auth email OTP, gated by single-use invite codes; per-user Strava tokens and a
+12 h-TTL stats cache live in Neon Postgres. Every prompt, recommendation, and
+thumb is persisted — that's the pilot's learning data.
 
-An internal tool for reviewing and editing the route library — map + form per
-route, writes back to `route-library/routes/<id>.geojson` with schema
-validation. Run `npm run dev`, set `NEXT_PUBLIC_MAPBOX_TOKEN` in `.env.local`,
-and open <http://localhost:3000/curate>. Full workflow lives in
-[`route-library/README.md`](./route-library/README.md). Not deployed — it
-relies on local filesystem writes.
+Deeper docs:
+
+- [`CLAUDE.md`](./CLAUDE.md) — current state, architecture, layout, conventions
+  (the working context; kept accurate).
+- [`NEXT_STEPS.md`](./NEXT_STEPS.md) — roadmap: done / in progress / launch.
+- [`STRAVA_SETUP.md`](./STRAVA_SETUP.md) — Strava API app registration.
+- [`route-library/README.md`](./route-library/README.md) — route curation
+  workflow (scaffold → ingest → promote).
 
 ## Run it locally
 
 1. `npm install`
-2. Register a Strava API app and fill in `.env` — see `STRAVA_SETUP.md`.
-   ```
-   cp .env.example .env
-   # then paste your client id/secret and run: openssl rand -hex 32  -> OAUTH_STATE_SECRET
-   ```
-3. `npm run dev` and open http://localhost:3000
-4. Click **Connect with Strava**, approve, and you should land back with
-   "Strava connected" plus your 90-day run count.
+2. Create `.env.local` — every required var is in
+   [`.env.example`](./.env.example): Strava client id/secret,
+   `OAUTH_STATE_SECRET`, `ANTHROPIC_API_KEY`, `NEXT_PUBLIC_MAPBOX_TOKEN`,
+   `DATABASE_URL`, `NEON_AUTH_BASE_URL`, `NEON_AUTH_COOKIE_SECRET`,
+   `APP_BASE_URL`.
+3. `npm run dev` → <http://localhost:3000>
 
-> Note: this scaffold was authored but not build-tested in-session (no sandbox).
-> Run `npm install && npm run build` once locally to confirm before deploying.
+```
+npm run eval             # engine evals: 18 ranking (offline) + 17 intent (needs API key)
+npm run db:generate      # after editing src/lib/db/schema.ts
+npm run db:migrate       # apply migrations to Neon
+npm run db:seed-invites  # mint invite codes (--count/--note/--dry-run)
+```
 
-## Deploy to Vercel
+The `/curate` route-review tool is **dev-only** (it writes to the local
+filesystem; the page and route-edit API 404 in production).
 
-1. Push to GitHub, import the repo in Vercel.
-2. Add the same env vars in Vercel project settings. Set
-   `APP_BASE_URL` to your Vercel URL (e.g. `https://marin-trails.vercel.app`).
-3. In Strava app settings, set **Authorization Callback Domain** to your Vercel
-   domain (domain only, no `https://`, no path).
+## Deploy (Vercel)
 
-## Important scaffold caveats (read before the real pilot)
+1. Import the repo in Vercel; add the same env vars. Set `APP_BASE_URL` to the
+   deployed URL.
+2. In Strava app settings, set **Authorization Callback Domain** to the Vercel
+   domain (domain only — no scheme, no path).
+3. The Neon integration sets `DATABASE_URL`; migrations are applied manually
+   via `npm run db:migrate` (additive/nullable changes only — dev and prod
+   share one database during the pilot).
 
-- **Token storage is a signed cookie**, not a database. Fine for testing the
-  OAuth round-trip; replace with Postgres before inviting users. See the `TODO`
-  in `src/lib/session.ts` and `callback/route.ts`.
-- **No webhook handler yet** — `me/route.ts` does a live pull. The pilot wants a
-  webhook-first design for rate limits (see plan).
-- **Rate limiting**: helpers surface `429` as `RateLimitError`; backoff/queueing
-  is not implemented yet.
+## Pre-launch checklist (founders)
+
+Code-complete items are tracked in `NEXT_STEPS.md`; these need **founder
+action**, not code:
+
+- [ ] **Privacy & Terms:** fill `EFFECTIVE_DATE` and `CONTACT_EMAIL` in
+      `src/app/privacy/page.tsx` and `src/app/terms/page.tsx` (see the
+      `TODO(founders)` comments at the top of each file), and have counsel
+      review the liability clause in the terms.
+- [ ] **Dogfood:** run a few recommended routes for real — check pace estimate,
+      rationale, GPX; confirm nothing recommends a closed trail.
+- [ ] **Closures:** verify `route-library/closures.json` against official park
+      alerts weekly (current entry: re-check early August 2026).
+- [ ] **Last draft route:** promote or drop `point-reyes-point-to-point`.
+- [ ] **Invites:** seed real codes (`npm run db:seed-invites`), decide whether
+      to arm the full login wall (one-line matcher swap in `src/proxy.ts`),
+      send the onboarding email.
